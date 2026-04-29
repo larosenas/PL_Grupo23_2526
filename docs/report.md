@@ -20,3 +20,17 @@ The 'ast_nodes.py' file defines the main nodes used in this representation. Amon
 - 'ArrayAccess' and 'FunctionalCall' that are designed to support array access and function calls like 'MOD'.
 
 This structure was defined in a modular way so that the parser only needs to construct AST objects, while subsequent phases work on this representation without directly depending on the original source code.
+
+
+## Lexical Analysis
+
+Lexical analysis was implemented using the 'ply.lex' library.
+
+The lexer is responsible for transforming the Fortran source code into a sequence of tokens.
+Tokens were defined for a language keywords, identifiers, integers and real numbers, string, arithmetic operators, relational operators, logical operators and special symbols.
+
+Recognized keywords include, among others, 'PROGRAM', 'END', 'INTEGER', 'REAL', 'LOGICAL', 'IF', 'THEN', 'ELSE', 'ENDIF', 'DO', 'CONTINUE', 'GOTO', 'READ' and 'PRINT'.
+
+identifiers are standarized to uppercase in order to maintain compability with the traditional Fortran style, where the language is not case-sensitive in usual usage.
+
+At this stage, the compiler adopts a free-form approach to writing source code, simplifying lexical analysis compared to the fixed-column format of the original Fortran 77.
