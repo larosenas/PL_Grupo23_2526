@@ -89,7 +89,7 @@ class Do(Statement):
     Reprensents a do loop with a label
     """
     label: int
-    varibale: str
+    variable: str
     start: Expression
     end: Expression
     body: List[Statement]
