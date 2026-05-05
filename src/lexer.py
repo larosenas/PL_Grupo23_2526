@@ -39,55 +39,55 @@ t_PLUS = r"\+"
 t_MINUS = r"-"
 t_TIMES = r"\*"
 t_DIVIDE = r"/"
-t_ASSIGN = r":="
+t_ASSIGN = r"="
 t_LPAREN = r"\("
 t_RPAREN = r"\)"
 t_COMMA = r","
 t_SEMICOLON = r";"
 
 def t_EQ(t):
-    r".EQ\."
+    r"\.EQ\."
     return t
 
 def t_NE(t):
-    r".NE\."
+    r"\.NE\."
     return t
 
 def t_LT(t):
-    r".LT\."
+    r"\.LT\."
     return t
 
 def t_GT(t):
-    r".GT\."
+    r"\.GT\."
     return t
 
 def t_LE(t):
-    r".LE\."
+    r"\.LE\."
     return t
 
 def t_GE(t):
-    r".GE\."
+    r"\.GE\."
     return t
 
 def t_AND(t):
-    r".AND\."
+    r"\.AND\."
     return t
 
 def t_OR(t):
-    r".OR\."
+    r"\.OR\."
     return t
 
 def t_NOT(t):
-    r".NOT\."
+    r"\.NOT\."
     return t
 
 def t_TRUE(t):
-    r".TRUE\."
+    r"\.TRUE\."
     t.value = True
     return t
 
 def t_FALSE(t):
-    r".FALSE\."
+    r"\.FALSE\."
     t.value = False
     return t
 
@@ -118,6 +118,7 @@ t_ignore = " \t\r"
 def t_newline(t):
     r"\n+"
     t.lexer.lineno += len(t.value)
+    return t
 
 
 def t_comment(t):
@@ -136,5 +137,7 @@ def tokenize(source_code):
     lexer.input(source_code)
     return list(lexer)
 
-
+def t_comment_line(t):
+    r"^[Cc!].*"
+    pass
 

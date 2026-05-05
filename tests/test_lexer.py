@@ -29,9 +29,9 @@ def test_arithmetic_expression_tokens():
     assert token_types("A = 3 + 2 * B") == [
         "ID",
         "ASSIGN",
-        "INTEGER_NUMBER",
+        "INT_NUMBER",
         "PLUS",
-        "INTEGER_NUMBER",
+        "INT_NUMBER",
         "TIMES",
         "ID",
     ]
