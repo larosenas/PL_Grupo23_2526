@@ -10,10 +10,10 @@ The 'ast_nodes.py' file defines the main nodes used in this representation. Amon
 
 - 'Program' which represents the complete program.
 - 'Declaration', which represents variable declarations.
-- 'Assigment' that represents assigments.
+- 'Assignment' that represents assignments statements.
 - 'Print' and 'Read', which represent basic input/output operations.
-- 'IF' which represents conditional structures.
-- 'DO' that represents 'Do' loops with labels.
+- 'If' which represents conditional structures.
+- 'Do' that represents 'Do' loops with labels.
 - 'GOTO' and 'Continue', which represent jumps and labels.
 - 'BinaryOp' and 'UnaryOp', which represent arithmetic, relational and logical expressions.
 - 'variable', 'Number', 'String' and 'Boolean', which represent basic values.
@@ -31,6 +31,53 @@ Tokens were defined for a language keywords, identifiers, integers and real numb
 
 Recognized keywords include, among others, 'PROGRAM', 'END', 'INTEGER', 'REAL', 'LOGICAL', 'IF', 'THEN', 'ELSE', 'ENDIF', 'DO', 'CONTINUE', 'GOTO', 'READ' and 'PRINT'.
 
-identifiers are standarized to uppercase in order to maintain compability with the traditional Fortran style, where the language is not case-sensitive in usual usage.
+Identifiers are normalized to uppercase in order to maintain compability with the traditional Fortran style, where the language is not case-sensitive in usual usage.
+
+The lexer also recognizes Fortran-style relational and logical operators, such as '.EQ.', '.NE.', '.LT.', '.LE.', '.GT.', '.GE.', '.AND.', '.OR.', '.NOT.', '.TRUE.' and '.FALSE.'.
+
+Newline characters are returned as 'NEWLINE' tokens. This decision simplifies the parser, because the grammar can explicitly distinguish the end of one statement from the beginning of the next one.
 
 At this stage, the compiler adopts a free-form approach to writing source code, simplifying lexical analysis compared to the fixed-column format of the original Fortran 77.
+
+
+
+
+## Tests
+
+The project includes tests using 'pytest'.
+
+
+The lexer tests verify that the source code is correctly transformed into tokens. They cover:
+
+- program headers;
+- integer declarations;
+- print statements with strings;
+- arithmetic expressions;
+- relational operators;
+- logical operators;
+- string values without quotes;
+- boolean values.
+
+The parser tests verify that valid Fortran-like programs are correctly transformed into AST structures. They cover:
+
+- a minimal 'HELLO' program;
+- variable declarations and assignments;
+- 'IF' statements;
+- labelled 'Do' loops;
+- 'GOTO' statements.
+
+At the current stage, all available tests pass successfully:
+
+```text
+24 passed
+
+
+
+
+
+## Execution Instructions --ESTO IGUAL EN EL README
+
+To install the required dependencies:
+
+```bash
+pip install -r requirements.txt

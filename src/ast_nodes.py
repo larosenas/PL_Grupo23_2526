@@ -53,9 +53,9 @@ class Declaration(ASTnode):
 # ------------------
 
 @dataclass
-class Assigment(Statement):
+class Assignment(Statement):
     """
-    Represents and assigment
+    Represents and assignment
     """
     target: Expression #no como str para poder soportar arrays
     expr: Expression

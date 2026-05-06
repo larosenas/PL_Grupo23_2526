@@ -13,7 +13,7 @@ def test_parse_hello():
 def test_parse_assignment():
     src = "PROGRAM T\nINTEGER X\nX = 5\nEND\n"
     tree = parse(src)
-    assert isinstance(tree.statements[0], Assigment)
+    assert isinstance(tree.statements[0], Assignment)
 
 def test_parse_if():
     src = "PROGRAM T\nIF (A .GT. 0) THEN\nPRINT *, 'pos'\nENDIF\nEND\n"

@@ -27,7 +27,7 @@ reserved = {
 # List of token names
 
 tokens = [
-    "ID", "INT_NUMBER", "REAL_NUMBER", "STRING",
+    "ID", "INT_NUMBER", "REAL_NUMBER", "STRING", "NEWLINE",
     "PLUS", "MINUS", "TIMES", "DIVIDE", "ASSIGN",
     "LPAREN", "RPAREN", "COMMA", "SEMICOLON",
     "EQ", "NE", "LT", "GT", "LE", "GE",
@@ -115,7 +115,7 @@ def t_ID(t):
 
 t_ignore = " \t\r"
 
-def t_newline(t):
+def t_NEWLINE(t):
     r"\n+"
     t.lexer.lineno += len(t.value)
     return t

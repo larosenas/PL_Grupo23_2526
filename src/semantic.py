@@ -10,7 +10,7 @@ from typing import Any, Dict, Iterable, Optional, Set
 # Import AST node classes for semantic analysis
 from src.ast_nodes import (
     ArrayAccess,
-    Assigment,
+    Assignment,
     BinaryOp,
     Boolean,
     Continue,
@@ -207,7 +207,7 @@ class SemanticAnalyzer:
             return
 
         # Analyze different types of statements with appropriate validation
-        if isinstance(statement, Assigment):
+        if isinstance(statement, Assignment):
             self._analyze_assignment(statement)
 
         elif isinstance(statement, Print):
@@ -260,7 +260,7 @@ class SemanticAnalyzer:
         if statement.label not in self.labels:
             raise SemanticError(f"GOTO references undefined label '{statement.label}'")
 
-    def _analyze_assignment(self, statement: Assigment) -> None:
+    def _analyze_assignment(self, statement: Assignment) -> None:
         # Get types of target and expression
         target_type = self._analyze_assignable(statement.target)
         expression_type = self._expression_type(statement.expr)

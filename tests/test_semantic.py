@@ -9,7 +9,7 @@ import pytest
 # Import AST node classes representing the abstract syntax tree elements
 from src.ast_nodes import (
     ArrayAccess,
-    Assigment,
+    Assignment,
     BinaryOp,
     Boolean,
     Continue,
@@ -50,7 +50,7 @@ def test_valid_program_with_declaration_assignment_and_print():
         name="TEST",
         declarations=[Declaration("INTEGER", ["A"])],
         statements=[
-            Assigment(Variable("A"), Number(3)),
+            Assignment(Variable("A"), Number(3)),
             Print([Variable("A")]),
         ],
     )
@@ -70,7 +70,7 @@ def test_variable_used_before_declaration_fails():
         name="TEST",
         declarations=[Declaration("INTEGER", ["A"])],
         statements=[
-            Assigment(
+            Assignment(
                 Variable("B"),  # B is used but never declared
                 BinaryOp("+", Variable("A"), Number(1)),
             )
@@ -110,7 +110,7 @@ def test_incompatible_assignment_fails():
     program = Program(
         name="TEST",
         declarations=[Declaration("INTEGER", ["A"])],
-        statements=[Assigment(Variable("A"), Boolean(True))],  # BOOLEAN to INTEGER
+        statements=[Assignment(Variable("A"), Boolean(True))],  # BOOLEAN to INTEGER
     )
 
     # Expect a SemanticError about incompatible type assignment
@@ -233,14 +233,14 @@ def test_valid_do_loop():
         name="TEST",
         declarations=[Declaration("INTEGER", ["I", "FAT"])],
         statements=[
-            Assigment(Variable("FAT"), Number(1)),  # Initialize factorial to 1
+            Assignment(Variable("FAT"), Number(1)),  # Initialize factorial to 1
             Do(
                 label=10,
                 variable="I",       # Note: corrected from 'varibale' to 'variable'
                 start=Number(1),    # Loop from 1 to 5
                 end=Number(5),
                 body=[
-                    Assigment(                      # FAT = FAT * I
+                    Assignment(                      # FAT = FAT * I
                         Variable("FAT"),
                         BinaryOp("*", Variable("FAT"), Variable("I")),
                     ),
