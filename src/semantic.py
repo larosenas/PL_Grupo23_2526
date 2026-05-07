@@ -27,6 +27,7 @@ from src.ast_nodes import (
     String,
     Variable,
 )
+
 # Import custom error class for semantic errors
 from src.errors import SemanticError
 
@@ -41,6 +42,7 @@ NUMERIC_TYPES = {INTEGER, REAL}
 # Set of valid types for variables (excludes STRING as it's not assignable)
 VALID_TYPES = {INTEGER, REAL, LOGICAL}
 
+
 # Define a frozen dataclass to represent a symbol in the symbol table
 @dataclass(frozen=True)
 class Symbol:
@@ -48,6 +50,7 @@ class Symbol:
     var_type: str
     is_array: bool = False
     size: Optional[int] = None
+
 
 # Class to manage the symbol table for variables
 class SymbolTable:
@@ -99,11 +102,13 @@ class SymbolTable:
         # Return a copy of the symbols dictionary
         return dict(self._symbols)
 
+
 # Main class for semantic analysis
 class SemanticAnalyzer:
     def __init__(self) -> None:
         # Initialize symbol table and labels set
         self.symbol_table = SymbolTable()
+        # Track all numeric labels found in the program to validate GOTO and DO targets
         self.labels: Set[int] = set()
 
     def analyze(self, program: Program) -> SymbolTable:
@@ -136,7 +141,9 @@ class SemanticAnalyzer:
                     size=size,
                 )
 
-    def _parse_declared_variable(self, declared: Any) -> tuple[str, bool, Optional[int]]:
+    def _parse_declared_variable(
+        self, declared: Any
+    ) -> tuple[str, bool, Optional[int]]:
         # Handle string format for declarations
         if isinstance(declared, str):
             text = declared.strip().upper()
@@ -162,11 +169,12 @@ class SemanticAnalyzer:
     def _collect_labels(self, statements: Iterable[Any]) -> None:
         # Iterate through statements to collect labels
         for statement in statements:
-            # Add label from Continue statements
+            # Add label from Continue statements, which may act as loop terminators
             if isinstance(statement, Continue) and statement.label is not None:
                 self._add_label(statement.label)
 
-            # Handle labelled statements
+            # Handle labelled statements and nested statement wrappers
+            # The parser may represent a labelled statement as an object with a label and inner statement
             labelled_statement = getattr(statement, "statement", None)
             label = getattr(statement, "label", None)
             if labelled_statement is not None and label is not None:
@@ -201,6 +209,7 @@ class SemanticAnalyzer:
         # statement to its specific validation logic
 
         # Handle labelled statements by analyzing the inner statement
+        # This allows label wrappers to be transparent for semantic validation
         labelled_statement = getattr(statement, "statement", None)
         if labelled_statement is not None:
             self._analyze_statement(labelled_statement)
@@ -240,7 +249,9 @@ class SemanticAnalyzer:
 
         else:
             # If we encounter an unknown statement type, it's a language implementation error
-            raise SemanticError(f"Unsupported statement node: {type(statement).__name__}")
+            raise SemanticError(
+                f"Unsupported statement node: {type(statement).__name__}"
+            )
 
     def _analyze_if_statement(self, statement: If) -> None:
         """Analyze an IF statement ensuring the condition is logical and both branches are valid."""
@@ -300,7 +311,7 @@ class SemanticAnalyzer:
         raise SemanticError(f"Invalid assignment target: {type(target).__name__}")
 
     def _analyze_do(self, statement: Do) -> None:
-        # Get the loop variable name (handle both correct and incorrect attribute names for compatibility)
+        # Get the loop variable name, tolerating parser output with the misspelled attribute name
         loop_variable_name = getattr(statement, "variable", None) or getattr(
             statement, "varibale", None
         )
@@ -328,7 +339,10 @@ class SemanticAnalyzer:
         # Check if last statement is the correct continue
         last_statement = statement.body[-1]
 
-        if not isinstance(last_statement, Continue) or last_statement.label != statement.label:
+        if (
+            not isinstance(last_statement, Continue)
+            or last_statement.label != statement.label
+        ):
             raise SemanticError(
                 f"DO {statement.label} must finish with CONTINUE label {statement.label}"
             )
@@ -417,8 +431,18 @@ class SemanticAnalyzer:
 
         # Relational operators compare values and produce logical results
         if op in {
-            ".EQ.", ".NE.", ".LT.", ".LE.", ".GT.", ".GE.",  # Fortran-style
-            "EQ", "NE", "LT", "LE", "GT", "GE",             # Alternative style
+            ".EQ.",
+            ".NE.",
+            ".LT.",
+            ".LE.",
+            ".GT.",
+            ".GE.",  # Fortran-style
+            "EQ",
+            "NE",
+            "LT",
+            "LE",
+            "GT",
+            "GE",  # Alternative style
         }:
             # Numeric types can be compared with all relational operators
             if left_type in NUMERIC_TYPES and right_type in NUMERIC_TYPES:
@@ -428,7 +452,9 @@ class SemanticAnalyzer:
             if op in {".EQ.", ".NE.", "EQ", "NE"} and left_type == right_type:
                 return LOGICAL
 
-            raise SemanticError(f"Invalid operands for relational operator '{expression.op}'")
+            raise SemanticError(
+                f"Invalid operands for relational operator '{expression.op}'"
+            )
 
         # Logical operators require logical operands and produce logical results
         if op in {".AND.", ".OR.", "AND", "OR"}:
@@ -446,7 +472,7 @@ class SemanticAnalyzer:
         name = expression.name.upper()
         arguments = expression.arguments
 
-        # Handle MOD function
+        # Handle MOD function call semantics
         if name == "MOD":
             if len(arguments) != 2:
                 raise SemanticError("MOD requires exactly two arguments")
@@ -459,7 +485,8 @@ class SemanticAnalyzer:
 
             return INTEGER
 
-        # Raise error for unsupported functions
+        # Unsupported functions are rejected by the semantic analyzer
+        # This is the extension point for future built-in function support
         raise SemanticError(f"Unsupported function call '{expression.name}'")
 
     def _require_numeric(self, left_type: str, right_type: str, operator: str) -> None:
