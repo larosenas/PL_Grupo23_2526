@@ -1,9 +1,11 @@
 from src.lexer import tokenize
 
 def token_types(source):
+    # Extract the token types from the tokenized source code.
     return [token.type for token in tokenize(source)]
 
 def token_values(source):
+    # Extract the token values from the tokenized source code.
     return [token.value for token in tokenize(source)]
 
 def test_program_header_tokens():
@@ -18,7 +20,7 @@ def test_integer_declaration_tokens():
     ]
 
 def test_print_string_tokens():
-    assert token_types("PRINT *, 'Ola, Mundo!'") == [
+    assert token_types("PRINT *, 'Hello, World!'") == [
         "PRINT",
         "TIMES",
         "COMMA",
@@ -45,7 +47,7 @@ def test_logical_operator_tokens():
 
 
 def test_string_value_without_quotes():
-    assert token_values("'Ola, Mundo!'") == ["Ola, Mundo!"]
+    assert token_values("'Hello, World!'") == ["Hello, World!"]
 
 
 def test_boolean_values():

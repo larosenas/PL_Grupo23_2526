@@ -26,12 +26,12 @@ def test_codegen_print_string():
     program = Program(
         name="HELLO",
         declarations=[],
-        statements=[Print([String("Ola, Mundo!")])],
+        statements=[Print([String("Hello, World!")])],
     )
 
     code = CodeGenerator().generate(program)
 
-    assert code == ('PUSHS "Ola, Mundo!"\n' "WRITES\n" "WRITELN\n" "STOP\n")
+    assert code == ('PUSHS "Hello, World!"\n' "WRITES\n" "WRITELN\n" "STOP\n")
 
 
 def test_codegen_empty_program():
@@ -116,6 +116,7 @@ def test_codegen_print_variable():
 
 
 def test_codegen_read_integer_variable():
+    # Test reading an integer value into a variable from input.
     program = Program(
         name="TEST",
         declarations=[Declaration("INTEGER", ["N"])],
@@ -128,6 +129,7 @@ def test_codegen_read_integer_variable():
 
 
 def test_codegen_boolean_assignment():
+    # Test assigning a boolean value to a logical variable.
     program = Program(
         name="TEST",
         declarations=[Declaration("LOGICAL", ["FLAG"])],
@@ -140,6 +142,7 @@ def test_codegen_boolean_assignment():
 
 
 def test_codegen_relational_expression():
+    # Test evaluating a relational expression (greater than) and assigning to a boolean variable.
     program = Program(
         name="TEST",
         declarations=[
@@ -171,6 +174,7 @@ def test_codegen_relational_expression():
 
 
 def test_codegen_logical_and_expression():
+    # Test evaluating a logical AND operation between two boolean variables.
     program = Program(
         name="TEST",
         declarations=[Declaration("LOGICAL", ["A", "B", "C"])],
@@ -237,6 +241,7 @@ def test_codegen_if_else():
 
 
 def test_codegen_goto_and_continue():
+    # Test generating code for GOTO and CONTINUE statements with labels.
     program = Program(
         name="TEST",
         declarations=[],
@@ -303,6 +308,7 @@ def test_codegen_do_loop():
 
 
 def test_codegen_mod_function_call():
+    # Test calling the MOD function and assigning the result to a variable.
     program = Program(
         name="TEST",
         declarations=[Declaration("INTEGER", ["A"])],
@@ -319,6 +325,7 @@ def test_codegen_mod_function_call():
     assert code == ("PUSHI 0\n" "PUSHI 10\n" "PUSHI 3\n" "MOD\n" "STOREG 0\n" "STOP\n")
 
 def test_codegen_array_read_and_access():
+    # Test reading into an array element and accessing it in an expression.
     program = Program(
         name="TEST",
         declarations=[

@@ -266,6 +266,7 @@ class CodeGenerator:
         return self.symbols[key]
 
     def _binary_expression(self, expression):
+        # Generate code for binary operations, mapping operators to VM instructions.
         code = []
 
         # Evaluate left and right operands before emitting the operator.
@@ -408,7 +409,7 @@ class CodeGenerator:
         return [f"F_{statement.label}:"]
 
     def _do(self, statement):
-        # Generate code for a DO loop: DO label variable = start, end
+        # Generate code for a DO loop: initialize variable, check bounds, execute body, increment, and repeat.
         variable_name = statement.variable
         variable_index = self._lookup(variable_name)
 
@@ -477,6 +478,7 @@ class CodeGenerator:
         raise CodeGenerationError(f"Unsupported function call '{expression.name}'")
 
     def _parse_declared_variable(self, name):
+        # Parse variable name and size from declaration, handling arrays like "ARRAY(5)".
         text = name.upper()
 
         if "(" in text and text.endswith(")"):
@@ -487,6 +489,7 @@ class CodeGenerator:
         return text, 1
 
     def _array_address(self, expression):
+        # Calculate the memory address for a 1-based Fortran array access with bounds checking.
         array_name = expression.name.upper()
 
         if array_name not in self.symbols:
