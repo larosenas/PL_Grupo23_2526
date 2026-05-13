@@ -45,6 +45,8 @@ t_RPAREN = r"\)"
 t_COMMA = r","
 t_SEMICOLON = r";"
 
+#Relational and logical operators
+
 def t_EQ(t):
     r"\.EQ\."
     return t
@@ -91,6 +93,8 @@ def t_FALSE(t):
     t.value = False
     return t
 
+#Numbers
+
 def t_REAL_NUMBER(t):
     r"\d+\.\d+"
     t.value = float(t.value)
@@ -101,10 +105,25 @@ def t_INT_NUMBER(t):
     t.value = int(t.value)
     return t        
 
+#Strings and comments
+
 def t_STRING(t):
     r"'[^']*'"
     t.value = t.value[1:-1]  # Remove the surrounding quotes
     return t
+
+
+def t_comment(t):
+    r"!.*"
+    pass
+
+
+def t_comment_line(t):
+    r"^[Cc!].*"
+    pass
+
+
+#Identifiers and reserved words
 
 def t_ID(t):
     r"[A-Za-z_][A-Za-z0-9_]*"
@@ -115,16 +134,17 @@ def t_ID(t):
 
 t_ignore = " \t\r"
 
+
+#Newlines
+
 def t_NEWLINE(t):
     r"\n+"
     t.lexer.lineno += len(t.value)
     return t
 
 
-def t_comment(t):
-    r"!.*"
-    pass
 
+#Error
 
 def t_error(t):
     raise SyntaxError(
@@ -136,8 +156,3 @@ lexer = lex.lex()
 def tokenize(source_code):
     lexer.input(source_code)
     return list(lexer)
-
-def t_comment_line(t):
-    r"^[Cc!].*"
-    pass
-
