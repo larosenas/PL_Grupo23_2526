@@ -26,6 +26,7 @@ from src.ast_nodes import (
     Return,
     String,
     Variable,
+    UnaryOp,
 )
 
 # Import custom error class for semantic errors
@@ -400,8 +401,28 @@ class SemanticAnalyzer:
         if isinstance(expression, FuntionalCall):
             return self._function_call_type(expression)
 
+        # Handle unary operations (e.g., negation, logical NOT)
+        if isinstance(expression, UnaryOp):
+            return self._unary_expression_type(expression)
+
         # If we reach here, the expression type is not supported
         raise SemanticError(f"Unsupported expression node: {type(expression).__name__}")
+
+    def _unary_expression_type(self, expression: UnaryOp) -> str:
+        op = expression.op.upper()
+        operand_type = self._expression_type(expression.operand)
+
+        if op == "-":
+            if operand_type not in NUMERIC_TYPES:
+                raise SemanticError("Unary '-' operator requires a numeric operand")
+            return operand_type  # Result type is the same as operand type
+
+        if op in {".NOT.", "NOT"}:
+            if operand_type != LOGICAL:
+                raise SemanticError("Unary NOT operator requires a LOGICAL operand")
+            return LOGICAL
+
+        raise SemanticError(f"Unsupported unary operator '{expression.op}'")
 
     def _binary_expression_type(self, expression: BinaryOp) -> str:
         """

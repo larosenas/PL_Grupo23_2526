@@ -14,6 +14,7 @@ from src.ast_nodes import (
     Do,
     FuntionalCall,
     ArrayAccess,
+    UnaryOp,
 )
 from src.errors import CodeGenerationError
 
@@ -170,6 +171,8 @@ class CodeGenerator:
             code.extend(self._array_address(expression))
             code.append("LOAD 0")
             return code
+        if isinstance(expression, UnaryOp):
+            return self._unary_expression(expression)
 
         raise CodeGenerationError(
             f"Unsupported expression: {type(expression).__name__}"
@@ -184,7 +187,7 @@ class CodeGenerator:
             if isinstance(expression.value, float):
                 return "REAL"
             return "INTEGER"
-        
+
         if isinstance(expression, Boolean):
             return "LOGICAL"
 
@@ -240,6 +243,13 @@ class CodeGenerator:
                 raise CodeGenerationError(f"Array '{key}' has no declared type")
 
             return self.types[key]
+        if isinstance(expression, UnaryOp):
+            op = expression.op.upper()
+
+            if op in {".NOT.", "NOT"}:
+                return "LOGICAL"
+
+            raise CodeGenerationError(f"Unsupported unary operator '{expression.op}'")
 
         raise CodeGenerationError(
             f"Cannot determine expression type: {type(expression).__name__}"
@@ -521,3 +531,14 @@ class CodeGenerator:
         code.append("PADD")
 
         return code
+
+    def _unary_expression(self, expression):
+        op = expression.op.upper()
+
+        if op in {".NOT.", "NOT"}:
+            code = []
+            code.extend(self._expression(expression.operand))
+            code.append("NOT")
+            return code
+
+        raise CodeGenerationError(f"Unsupported unary operator '{expression.op}'")

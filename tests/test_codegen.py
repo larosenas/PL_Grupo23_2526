@@ -15,6 +15,7 @@ from src.ast_nodes import (
     Do,
     FuntionalCall,
     ArrayAccess,
+    UnaryOp,
 )
 from src.codegen import CodeGenerator
 
@@ -324,17 +325,14 @@ def test_codegen_mod_function_call():
 
     assert code == ("PUSHI 0\n" "PUSHI 10\n" "PUSHI 3\n" "MOD\n" "STOREG 0\n" "STOP\n")
 
+
 def test_codegen_array_read_and_access():
     # Test reading into an array element and accessing it in an expression.
     program = Program(
         name="TEST",
-        declarations=[
-            Declaration("INTEGER", ["NUMS(5)", "I", "SOMA"])
-        ],
+        declarations=[Declaration("INTEGER", ["NUMS(5)", "I", "SOMA"])],
         statements=[
-            Read([
-                ArrayAccess("NUMS", Variable("I"))
-            ]),
+            Read([ArrayAccess("NUMS", Variable("I"))]),
             Assignment(
                 Variable("SOMA"),
                 BinaryOp(
@@ -375,5 +373,32 @@ def test_codegen_array_read_and_access():
         "LOAD 0\n"
         "ADD\n"
         "STOREG 6\n"
+        "STOP\n"
+    )
+
+
+def test_codegen_logical_not_expression():
+    program = Program(
+        name="TEST",
+        declarations=[Declaration("LOGICAL", ["FLAG", "RESULT"])],
+        statements=[
+            Assignment(Variable("FLAG"), Boolean(True)),
+            Assignment(
+                Variable("RESULT"),
+                UnaryOp(".NOT.", Variable("FLAG")),
+            ),
+        ],
+    )
+
+    code = CodeGenerator().generate(program)
+
+    assert code == (
+        "PUSHI 0\n"
+        "PUSHI 0\n"
+        "PUSHI 1\n"
+        "STOREG 0\n"
+        "PUSHG 0\n"
+        "NOT\n"
+        "STOREG 1\n"
         "STOP\n"
     )
