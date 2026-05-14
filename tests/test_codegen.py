@@ -1,3 +1,5 @@
+import pytest
+
 from src.ast_nodes import (
     Program,
     Print,
@@ -18,6 +20,7 @@ from src.ast_nodes import (
     UnaryOp,
 )
 from src.codegen import CodeGenerator
+from src.errors import CodeGenerationError
 
 # Code generation unit tests for the simple VM backend.
 # These tests ensure that AST nodes are translated into the expected instruction stream.
@@ -402,3 +405,88 @@ def test_codegen_logical_not_expression():
         "STOREG 1\n"
         "STOP\n"
     )
+
+
+# The generator does not create global addresses for undeclared variables.
+# Attempting to use STOREG on a non-existent variable will result in a controlled failure.
+def test_codegen_assignment_to_undeclared_variable_fails():
+    program = Program(
+        name="TEST",
+        declarations=[],
+        statements=[Assignment(Variable("A"), Number(3))],
+    )
+
+    with pytest.raises(CodeGenerationError, match="A"):
+        CodeGenerator().generate(program)
+
+
+# PUSHG is only generated for variables present in the generator's symbol table.
+def test_codegen_print_undeclared_variable_fails():
+    program = Program(
+        name="TEST",
+        declarations=[],
+        statements=[Print([Variable("A")])],
+    )
+
+    with pytest.raises(CodeGenerationError, match="A"):
+        CodeGenerator().generate(program)
+
+
+# The backend does not overwrite global addresses if a variable appears twice.
+def test_codegen_duplicate_declaration_fails():
+    program = Program(
+        name="TEST",
+        declarations=[
+            Declaration("INTEGER", ["A"]),
+            Declaration("REAL", ["A"]),
+        ],
+        statements=[],
+    )
+
+    with pytest.raises(CodeGenerationError, match="already allocated"):
+        CodeGenerator().generate(program)
+
+
+# The backend does not generate made-up instructions for unimplemented operators.
+def test_codegen_unsupported_binary_operator_fails():
+    program = Program(
+        name="TEST",
+        declarations=[Declaration("INTEGER", ["A"])],
+        statements=[
+            Assignment(
+                Variable("A"),
+                BinaryOp("**", Number(2), Number(3)),
+            )
+        ],
+    )
+
+    with pytest.raises(CodeGenerationError, match="Unsupported binary operator"):
+        CodeGenerator().generate(program)
+
+
+def test_codegen_unsupported_function_call_fails():
+    program = Program(
+        name="TEST",
+        declarations=[Declaration("INTEGER", ["A"])],
+        statements=[
+            Assignment(
+                Variable("A"),
+                FunctionCall("CONVRT", [Number(10), Number(2)]),
+            )
+        ],
+    )
+
+    with pytest.raises(CodeGenerationError, match="Unsupported function call"):
+        CodeGenerator().generate(program)
+
+
+# The backend does not attempt to convert text input to LOGICAL without a defined rule
+def test_codegen_read_logical_variable_fails():
+    program = Program(
+        name="TEST",
+        declarations=[Declaration("LOGICAL", ["FLAG"])],
+        statements=[Read([Variable("FLAG")])],
+    )
+
+    with pytest.raises(CodeGenerationError, match="READ only supports"):
+        CodeGenerator().generate(program)

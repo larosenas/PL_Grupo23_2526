@@ -16,6 +16,7 @@ from src.ast_nodes import (
     Declaration,
     Do,
     GOTO,
+    FunctionCall,
     If,
     Number,
     Print,
@@ -59,7 +60,6 @@ def test_valid_program_with_declaration_assignment_and_print():
         ],
     )
 
-    # Analyze the program for semantic validity
     table = analyze(program)
 
     # Verify that variable A is correctly stored as INTEGER type in symbol table
@@ -81,7 +81,6 @@ def test_variable_used_before_declaration_fails():
         ],
     )
 
-    # Expect a SemanticError containing the variable name "B"
     with pytest.raises(SemanticError, match="B"):
         analyze(program)
 
@@ -165,7 +164,6 @@ def test_valid_if_with_relational_condition():
         ],
     )
 
-    # This should not raise an error - the program is semantically valid
     analyze(program)
 
 
@@ -219,7 +217,7 @@ def test_do_must_finish_with_matching_continue_label():
         statements=[
             Do(
                 label=10,  # DO loop with label 10
-                variable="I",  # Note: corrected from 'varibale' to 'variable'
+                variable="I",
                 start=Number(1),
                 end=Number(5),
                 body=[Continue(20)],  # CONTINUE with wrong label 20
@@ -291,7 +289,6 @@ def test_array_access_requires_integer_index():
 
 
 # Test: Logical NOT operator with logical operand is valid
-# This test verifies that the logical NOT operator is semantically valid when
 def test_logical_not_expression_is_valid():
     program = Program(
         name="TEST",
@@ -323,4 +320,140 @@ def test_logical_not_requires_logical_operand():
     )
 
     with pytest.raises(SemanticError, match="LOGICAL operand"):
+        analyze(program)
+
+
+# MOD(10.5, 3) should not be accepted because MOD only makes sense with integers.
+def test_mod_requires_integer_arguments():
+    program = Program(
+        name="TEST",
+        declarations=[Declaration("INTEGER", ["A"])],
+        statements=[
+            Assignment(
+                Variable("A"),
+                FunctionCall("MOD", [Number(10.5), Number(3)]),
+            )
+        ],
+    )
+
+    with pytest.raises(SemanticError, match="MOD arguments must be INTEGER"):
+        analyze(program)
+
+
+# A .AND. B is not valid if A and B are INTEGER.
+def test_logical_and_requires_logical_operands():
+    program = Program(
+        name="TEST",
+        declarations=[
+            Declaration("INTEGER", ["A", "B"]),
+            Declaration("LOGICAL", ["FLAG"]),
+        ],
+        statements=[
+            Assignment(
+                Variable("FLAG"),
+                BinaryOp(".AND.", Variable("A"), Variable("B")),
+            )
+        ],
+    )
+
+    with pytest.raises(SemanticError, match="LOGICAL operands"):
+        analyze(program)
+
+
+# NUMS cannot be used as a scalar value if it was declared as NUMS(5).
+# NUMS(I) must be used.
+def test_array_used_without_index_fails():
+    program = Program(
+        name="TEST",
+        declarations=[Declaration("INTEGER", ["NUMS(5)"])],
+        statements=[Print([Variable("NUMS")])],
+    )
+
+    with pytest.raises(SemanticError, match="requires an index"):
+        analyze(program)
+
+
+# A(I) is not valid if A was declared as INTEGER A and not as INTEGER A(5).
+def test_scalar_variable_used_as_array_fails():
+    program = Program(
+        name="TEST",
+        declarations=[Declaration("INTEGER", ["A", "I"])],
+        statements=[Print([ArrayAccess("A", Variable("I"))])],
+    )
+
+    with pytest.raises(SemanticError, match="is not an array"):
+        analyze(program)
+
+
+# NUMS(I) is not valid if I was declared as REAL and not as INTEGER.
+def test_array_index_must_be_integer():
+    program = Program(
+        name="TEST",
+        declarations=[
+            Declaration("INTEGER", ["NUMS(5)"]),
+            Declaration("REAL", ["I"]),
+        ],
+        statements=[Print([ArrayAccess("NUMS", Variable("I"))])],
+    )
+
+    with pytest.raises(SemanticError, match="Array index"):
+        analyze(program)
+
+
+# DO loops must have an INTEGER control variable. A REAL variable cannot be used as the loop control variable.
+def test_do_control_variable_must_be_integer():
+    program = Program(
+        name="TEST",
+        declarations=[Declaration("REAL", ["I"])],
+        statements=[
+            Do(
+                label=10,
+                variable="I",
+                start=Number(1),
+                end=Number(5),
+                body=[Continue(10)],
+            )
+        ],
+    )
+
+    with pytest.raises(
+        SemanticError, match="DO control variable must be an INTEGER scalar"
+    ):
+        analyze(program)
+
+
+# DO loop bounds must be INTEGER expressions. REAL expressions cannot be used as DO loop bounds.
+def test_do_bounds_must_be_integer():
+    program = Program(
+        name="TEST",
+        declarations=[
+            Declaration("INTEGER", ["I"]),
+            Declaration("REAL", ["N"]),
+        ],
+        statements=[
+            Do(
+                label=10,
+                variable="I",
+                start=Number(1),
+                end=Variable("N"),
+                body=[Continue(10)],
+            )
+        ],
+    )
+
+    with pytest.raises(
+        SemanticError, match="DO start and end expressions must be INTEGER"
+    ):
+        analyze(program)
+
+
+# A REAL value cannot be assigned to an INTEGER variable.
+def test_cannot_assign_real_to_integer():
+    program = Program(
+        name="TEST",
+        declarations=[Declaration("INTEGER", ["A"])],
+        statements=[Assignment(Variable("A"), Number(3.5))],
+    )
+
+    with pytest.raises(SemanticError, match="Cannot assign"):
         analyze(program)
