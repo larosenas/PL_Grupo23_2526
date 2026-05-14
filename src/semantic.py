@@ -435,6 +435,16 @@ class SemanticAnalyzer:
         """
         # Get operator and operand types
         op = expression.op.upper()
+
+        # Handle unary NOT as a special case since it only has one operand
+        if op in {".NOT.", "NOT"} and expression.right is None:
+            operand_type = self._expression_type(expression.left)
+
+            if operand_type != LOGICAL:
+                raise SemanticError("Logical NOT requires a LOGICAL operand")
+
+            return LOGICAL
+
         left_type = self._expression_type(expression.left)
         right_type = self._expression_type(expression.right)
 

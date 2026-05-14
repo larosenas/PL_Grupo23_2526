@@ -202,6 +202,9 @@ class CodeGenerator:
         if isinstance(expression, BinaryOp):
             op = expression.op.upper()
 
+            if op in {".NOT.", "NOT"} and expression.right is None:
+                return "LOGICAL"
+
             if op in {
                 ".EQ.",
                 ".NE.",
@@ -279,8 +282,19 @@ class CodeGenerator:
         # Generate code for binary operations, mapping operators to VM instructions.
         code = []
 
-        # Evaluate left and right operands before emitting the operator.
+        # Evaluate the left operand first, as the operator will consume both from the stack.
         code.extend(self._expression(expression.left))
+
+        # Handle unary NOT as a special case since it only has one operand on the left.
+        op = expression.op.upper()
+
+        if op in {".NOT.", "NOT"} and expression.right is None:
+            code = []
+            code.extend(self._expression(expression.left))
+            code.append("NOT")
+            return code
+
+        # Evaluate the right operand after the left, as the operator will consume both from the stack.
         code.extend(self._expression(expression.right))
 
         # Map of operators to VM opcodes
