@@ -212,7 +212,7 @@ class ArrayAccess(Expression):
 
 
 @dataclass
-class FuntionalCall(Expression):
+class FunctionCall(Expression):
     """
     Reprensents a function call
     """

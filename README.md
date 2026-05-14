@@ -8,3 +8,20 @@ The compiler is implemented in Python using PLY.
 
 ## Installation
 
+
+## Documentation
+Program(name, declarations, statements)
+Declaration(var_type, names)          # names: ["X", "A(10)"]
+Assignment(target, expr)              # target: Variable | ArrayAccess
+If(condition, then_body, else_body)   # else_body puede ser None
+Do(label, variable, start, end, body)
+GOTO(label)
+Continue(label)
+Return()
+BinaryOp(op, left, right)            # right=None si es NOT o UMINUS
+Number(value)                         # int o float
+Variable(name)
+ArrayAccess(name, index)
+FunctionCall(name, arguments)
+String(value)
+Boolean(value)

@@ -13,11 +13,11 @@ The 'ast_nodes.py' file defines the main nodes used in this representation. Amon
 - 'Assignment' that represents assignments statements.
 - 'Print' and 'Read', which represent basic input/output operations.
 - 'If' which represents conditional structures.
-- 'Do' that represents 'Do' loops with labels.
+- 'DO' that represents 'Do' loops with labels.
 - 'GOTO' and 'Continue', which represent jumps and labels.
 - 'BinaryOp' and 'UnaryOp', which represent arithmetic, relational and logical expressions.
-- 'variable', 'Number', 'String' and 'Boolean', which represent basic values.
-- 'ArrayAccess' and 'FunctionalCall' that are designed to support array access and function calls like 'MOD'.
+- 'Variable', 'Number', 'String' and 'Boolean', which represent basic values.
+- 'ArrayAccess' and 'FunctionCall' that are designed to support array access and function calls like 'MOD'.
 
 This structure was defined in a modular way so that the parser only needs to construct AST objects, while subsequent phases work on this representation without directly depending on the original source code.
 
@@ -40,6 +40,32 @@ Newline characters are returned as 'NEWLINE' tokens. This decision simplifies th
 At this stage, the compiler adopts a free-form approach to writing source code, simplifying lexical analysis compared to the fixed-column format of the original Fortran 77.
 
 
+## Syntactic Analysis
+
+Syntactic analysis was implemented using the `ply.yacc`library.
+
+The parser receives the sequence of tokens produced by the lexer and checks whether the input follows grammar supported by the compiler. If the program is syntactically valid, the parser builds the corresponding Abstract Syntax Tree.
+
+The current parser supports the following constructs:
+
+- Program structure using `PROGRAM <identifier>` and `END`;
+- Variable declarations using `INTEGER`, `REAL` and `LOGICAL`;
+- Assignments statements;
+- Arithmetic expressions using  `+`, `-`, `*` and `/`;
+- Relational expressions using `.EQ.`, `.NE.`, `.LT.`, `.LE.`, `.GT.` and `.GE.`;
+- Logical expressions using `.AND.`, `.OR.` and `.NOT.`;
+- `PRINT *, ...` statements;
+- `READ *, ...` statements;
+- Conditional blocks using `IF (...) THEN ... ELSE... ENDIF`;
+- Labelled `DO` loops;
+- `GOTO` statements;
+- Labelled `CONTINUE`statements.
+
+Operator precedence was defined in the parser to avoid ambiguous parsing of expressions. Logical operators have lower precedence than relational operators, and arithmetic multiplication and division have higher precedence than addition and substraction.
+
+Newline tokens are part of the grammar. This allows the parser to identify the end of declarations and statements clearly. Optional newlines are also accepted after the final `END`, so source files ending with a trailing newline can be parsed correctly.
+
+The parser creates specific AST nodes depending on the recognized construct. For example, declarations generate `Declaration` nodes, assignments generate `Assignment` nodes, print statements generate `Print` nodes, conditional blocks generate `If` nodes, and labelled loops generate `Do` nodes.
 
 
 ## Tests
@@ -70,6 +96,7 @@ At the current stage, all available tests pass successfully:
 
 ```text
 24 passed
+```
 
 
 
@@ -81,3 +108,8 @@ To install the required dependencies:
 
 ```bash
 pip install -r requirements.txt
+```
+
+
+
+
