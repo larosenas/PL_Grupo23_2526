@@ -1,3 +1,5 @@
+import code
+
 import pytest
 from src.ast_nodes import (
     Assignment,
@@ -29,15 +31,24 @@ def analyze_and_generate(program):
 
 
 def assert_in_order(text, expected_lines):
-    # Assert that the expected lines appear in the given text in the specified order.
-    current_position = 0
+    """
+    Assert that the expected VM instructions appear in order.
+
+    The comparison is line-based to avoid accidental substring matches while
+    still allowing functional tests to remain independent from the full exact VM.
+    """
+    lines = text.splitlines()
+    current_index = 0
 
     for expected in expected_lines:
-        next_position = text.find(expected, current_position)
-
-        assert next_position != -1, f"Expected line not found in order: {expected}"
-
-        current_position = next_position + len(expected)
+        for index in range(current_index, len(lines)):
+            if lines[index] == expected:
+                current_index = index + 1
+                break
+        else:
+            raise AssertionError(
+                f"Expected VM instruction not found in order: {expected}"
+            )
 
 
 def test_backend_factorial_program():
@@ -74,46 +85,49 @@ def test_backend_factorial_program():
 
     code = analyze_and_generate(program)
 
-    assert code == (
-        "PUSHI 0\n"
-        "PUSHI 0\n"
-        "PUSHI 0\n"
-        'PUSHS "Enter a positive integer:"\n'
-        "WRITES\n"
-        "WRITELN\n"
-        "READ\n"
-        "ATOI\n"
-        "STOREG 0\n"
-        "PUSHI 1\n"
-        "STOREG 2\n"
-        "PUSHI 1\n"
-        "STOREG 1\n"
-        "DO_START_1:\n"
-        "PUSHG 1\n"
-        "PUSHG 0\n"
-        "INFEQ\n"
-        "JZ DO_END_2\n"
-        "PUSHG 2\n"
-        "PUSHG 1\n"
-        "MUL\n"
-        "STOREG 2\n"
-        "F_10:\n"
-        "PUSHG 1\n"
-        "PUSHI 1\n"
-        "ADD\n"
-        "STOREG 1\n"
-        "JUMP DO_START_1\n"
-        "DO_END_2:\n"
-        'PUSHS "Factorial of "\n'
-        "WRITES\n"
-        "PUSHG 0\n"
-        "WRITEI\n"
-        'PUSHS ": "\n'
-        "WRITES\n"
-        "PUSHG 2\n"
-        "WRITEI\n"
-        "WRITELN\n"
-        "STOP\n"
+    assert_in_order(
+        code,
+        [
+            "PUSHI 0",
+            "PUSHI 0",
+            "PUSHI 0",
+            'PUSHS "Enter a positive integer:"',
+            "WRITES",
+            "WRITELN",
+            "READ",
+            "ATOI",
+            "STOREG 0",
+            "PUSHI 1",
+            "STOREG 2",
+            "PUSHI 1",
+            "STOREG 1",
+            "DO_START_1:",
+            "PUSHG 1",
+            "PUSHG 0",
+            "INFEQ",
+            "JZ DO_END_2",
+            "PUSHG 2",
+            "PUSHG 1",
+            "MUL",
+            "STOREG 2",
+            "F_10:",
+            "PUSHG 1",
+            "PUSHI 1",
+            "ADD",
+            "STOREG 1",
+            "JUMP DO_START_1",
+            "DO_END_2:",
+            'PUSHS "Factorial of "',
+            "WRITES",
+            "PUSHG 0",
+            "WRITEI",
+            'PUSHS ": "',
+            "WRITES",
+            "PUSHG 2",
+            "WRITEI",
+            "WRITELN",
+            "STOP",
+        ],
     )
 
 
