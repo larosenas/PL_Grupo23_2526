@@ -16,7 +16,7 @@ from src.ast_nodes import (
     Continue,
     Declaration,
     Do,
-    FuntionalCall,
+    FunctionCall,
     GOTO,
     If,
     Number,
@@ -398,7 +398,7 @@ class SemanticAnalyzer:
             return self._binary_expression_type(expression)
 
         # Handle function calls
-        if isinstance(expression, FuntionalCall):
+        if isinstance(expression, FunctionCall):
             return self._function_call_type(expression)
 
         # Handle unary operations (e.g., negation, logical NOT)
@@ -488,7 +488,7 @@ class SemanticAnalyzer:
         # If we reach here, the operator is not supported
         raise SemanticError(f"Unsupported binary operator '{expression.op}'")
 
-    def _function_call_type(self, expression: FuntionalCall) -> str:
+    def _function_call_type(self, expression: FunctionCall) -> str:
         # Get function name and arguments
         name = expression.name.upper()
         arguments = expression.arguments

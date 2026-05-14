@@ -12,7 +12,7 @@ from src.ast_nodes import (
     GOTO,
     Continue,
     Do,
-    FuntionalCall,
+    FunctionCall,
     ArrayAccess,
     UnaryOp,
 )
@@ -163,7 +163,7 @@ class CodeGenerator:
         if isinstance(expression, Boolean):
             return [f"PUSHI {1 if expression.value else 0}"]
 
-        if isinstance(expression, FuntionalCall):
+        if isinstance(expression, FunctionCall):
             return self._function_call(expression)
 
         if isinstance(expression, ArrayAccess):
@@ -230,7 +230,7 @@ class CodeGenerator:
 
             return "INTEGER"
 
-        if isinstance(expression, FuntionalCall):
+        if isinstance(expression, FunctionCall):
             if expression.name.upper() == "MOD":
                 return "INTEGER"
 

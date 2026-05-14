@@ -13,7 +13,7 @@ from src.ast_nodes import (
     Variable,
     ArrayAccess,
     Boolean,
-    FuntionalCall,
+    FunctionCall,
     GOTO,
     If,
 )
@@ -240,7 +240,7 @@ def test_backend_prime_program():
                     If(
                         condition=BinaryOp(
                             ".EQ.",
-                            FuntionalCall("MOD", [Variable("NUM"), Variable("I")]),
+                            FunctionCall("MOD", [Variable("NUM"), Variable("I")]),
                             Number(0),
                         ),
                         then_body=[Assignment(Variable("ISPRIM"), Boolean(False))],
@@ -341,7 +341,7 @@ def test_backend_converter_user_defined_function_is_not_supported_yet():
                 body=[
                     Assignment(
                         Variable("RESULT"),
-                        FuntionalCall(
+                        FunctionCall(
                             "CONVRT",
                             [Variable("NUM"), Variable("BASE")],
                         ),

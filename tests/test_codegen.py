@@ -13,7 +13,7 @@ from src.ast_nodes import (
     GOTO,
     Continue,
     Do,
-    FuntionalCall,
+    FunctionCall,
     ArrayAccess,
     UnaryOp,
 )
@@ -316,7 +316,7 @@ def test_codegen_mod_function_call():
         statements=[
             Assignment(
                 Variable("A"),
-                FuntionalCall("MOD", [Number(10), Number(3)]),
+                FunctionCall("MOD", [Number(10), Number(3)]),
             )
         ],
     )
