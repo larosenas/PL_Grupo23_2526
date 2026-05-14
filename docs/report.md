@@ -360,10 +360,10 @@ The parser tests verify that valid Fortran-like programs are correctly transform
 At the current stage, all available tests pass successfully:
 
 ```text
-24 passed
+79 passed
 ```
 
-## Execution Instructions --ESTO IGUAL EN EL README
+## Execution Instructions
 
 To install the required dependencies:
 

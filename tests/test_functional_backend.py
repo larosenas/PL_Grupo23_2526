@@ -1,5 +1,3 @@
-import code
-
 import pytest
 from src.ast_nodes import (
     Assignment,
