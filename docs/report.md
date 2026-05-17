@@ -1,27 +1,36 @@
+## Range of the Project
+
+The compiler implements a subset of Fortran 77 focused on the constructs required by the assignment: declarations, arithmetic, relational and logical expressions, `IF`, labelled `DO`, `GOTO`, `READ` and `PRINT`.
+
+The compiler also supports arrays and the intrinsic `MOD` function. User-defined `FUNCTION` and `SUBROUTINE` constructs are partially represented at parser level, but they are not fully supported by the backend.
+
+
 ## Intermediate representation
 
 After lexical and sytantic analysis, the compiler constructs an intermediate representation of the program in the form of an abstract syntax tree(AST).
 
 This representation allows separating the language recognition phase from the subquent compiler phases, namely semantic analysis and code generation for the virtual machine.
 
-The 'ast_nodes.py' file defines the main nodes used in this representation. Among them are:
+The `ast_nodes.py` file defines the main nodes used in this representation. Among them are:
 
-- 'Program' which represents the complete program.
-- 'Declaration', which represents variable declarations.
-- 'Assignment' that represents assignments statements.
-- 'Print' and 'Read', which represent basic input/output operations.
-- 'If' which represents conditional structures.
-- 'DO' that represents 'Do' loops with labels.
-- 'GOTO' and 'Continue', which represent jumps and labels.
-- 'BinaryOp' and 'UnaryOp', which represent arithmetic, relational and logical expressions.
-- 'Variable', 'Number', 'String' and 'Boolean', which represent basic values.
-- 'ArrayAccess' and 'FunctionCall' that are designed to support array access and function calls like 'MOD'.
+-`File` which represents the complete compilation unit, containing a `Program`and a list of subprograms.
+- `Program` which represents the main program block.
+- `Declaration`, which represents variable declarations.
+- `Assignment` that represents assignments statements.
+- `Print` and `Read`, which represent basic input/output operations.
+- `If` which represents conditional , with optional `ELSE` branch.
+- `DO` that represents `Do` loops with labels.
+- `GOTO` and `Continue`, which represent jumps and labels.
+- `Return` which represents the `RETURN` statement inside subprograms.
+- `BinaryOp` and `UnaryOp`, which represent arithmetic, relational and logical expressions, it is also used for unary operations.
+- `Variable`, `Number`, `String` and `Boolean`, which represent basic values.
+- `ArrayAccess` and `FunctionCall` that represent array indexing and function calls respectively.
 
 This structure was defined in a modular way so that the parser only needs to construct AST objects, while subsequent phases work on this representation without directly depending on the original source code.
 
 ## Lexical Analysis
 
-Lexical analysis was implemented using the 'ply.lex' library.
+Lexical analysis was implemented using the `ply.lex` library.
 
 The lexer is responsible for transforming the Fortran source code into a sequence of tokens.
 Tokens were defined for a language keywords, identifiers, integers and real numbers, string, arithmetic operators, relational operators, logical operators and special symbols.
@@ -38,14 +47,14 @@ At this stage, the compiler adopts a free-form approach to writing source code, 
 
 ## Syntactic Analysis
 
-Syntactic analysis was implemented using the `ply.yacc`library.
+Syntactic analysis was implemented using the `ply.yacc` library.
 
 The parser receives the sequence of tokens produced by the lexer and checks whether the input follows grammar supported by the compiler. If the program is syntactically valid, the parser builds the corresponding Abstract Syntax Tree.
 
 The current parser supports the following constructs:
 
 - Program structure using `PROGRAM <identifier>` and `END`;
-- Variable declarations using `INTEGER`, `REAL` and `LOGICAL`;
+- Variable declarations using `INTEGER`, `REAL` and `LOGICAL`, including array declarations such as `INTEGER NUMS (5)`;
 - Assignments statements;
 - Arithmetic expressions using `+`, `-`, `*` and `/`;
 - Relational expressions using `.EQ.`, `.NE.`, `.LT.`, `.LE.`, `.GT.` and `.GE.`;
@@ -56,12 +65,30 @@ The current parser supports the following constructs:
 - Labelled `DO` loops;
 - `GOTO` statements;
 - Labelled `CONTINUE`statements.
+- `FUNCTION`and `SUBROUTINE` definitions defined by the user with parameters.
 
 Operator precedence was defined in the parser to avoid ambiguous parsing of expressions. Logical operators have lower precedence than relational operators, and arithmetic multiplication and division have higher precedence than addition and substraction.
 
 Newline tokens are part of the grammar. This allows the parser to identify the end of declarations and statements clearly. Optional newlines are also accepted after the final `END`, so source files ending with a trailing newline can be parsed correctly.
 
 The parser creates specific AST nodes depending on the recognized construct. For example, declarations generate `Declaration` nodes, assignments generate `Assignment` nodes, print statements generate `Print` nodes, conditional blocks generate `If` nodes, and labelled loops generate `Do` nodes.
+
+### Label Handling
+
+Fortran 77 allows statements to be prefixed by with a numeric label, which is used as a target for `GOTO` and `DO` statements. The parser handles labels by including them in the grammar rules for `continue`and `do`statements.
+
+### Array declarations and access
+
+Array declarations are handled at the id_list level. Each element in a declaration can be either a plain identifier or an identifier with a size. This allows mixed declarations like `INTEGER I, NUMS(5)` to be parsed correctly.
+Array access and fucntion calls share the same syntactic form, so depending on the number of arguments, the parser clasifies them as a `ArrayAccess` node (one argument) or a `FunctionCall` (two or more). 
+The semantic analyzer is responsible for resolving ambiguous single-argument cases.
+
+### Subprograms
+
+The top level grammar rule is file, which consists of a main program followed by an optional list of subprograms. This allows source files to contain both a main program and one or more `FUNCTION` or `SUBROUTINE`definitions.
+Each `FUNCTION` definition includes a return type, a name, a parameter list, local declarations and a body ending with `RETURN` and `END`. Each `SUBROUTINE` definition has the same structure but without the return type.
+The `parse()` function returns a file node containing the main program and the list of subprograms, processing them separately.
+
 
 ## Semantic Analysis
 
@@ -165,9 +192,9 @@ Relational and logical expressions also leave their result on the stack, allowin
 
 ## Control Flow Generation
 
-Conditional statements are translated using internal VM labels. An `IF / ELSE` statement generates a conditional jump with `JZ`, an optional jump to the end of the structure, and internal labels such as `ELSE_1` and `ENDIF_2`.
+Conditional statements are translated using internal VM labels. An `IF / ELSE` statement generates a conditional jump with `JZ`, an optional jump to the end of the structure, and internal labels such as `ELSE1` and `ENDIF2`.
 
-Fortran labels are represented separately using the `F_` prefix. For example:
+Fortran labels are represented separately using the `F` prefix. For example:
 
 ```fortran
 20 CONTINUE
@@ -304,12 +331,12 @@ The functional backend tests cover:
 - prime number checking;
 - unsupported user-defined function calls such as `CONVRT`.
 
-The examples tests verify that the example source files exist, are not empty, contain the expected program headers and include the required constructs from the assignment. The `hello.f` example is also compiled through the full pipeline.
+The examples tests verify that the example source files exist, are not empty, contain the expected program headers and include the required constructs from the assignment. The `hello.f`, `factorial.f`, `prime.f`and `sum_array.f` examples can be compiled through the pipeline.
 
 At the current stage, the complete project test suite passes successfully with:
 
 ```text
-79 passed
+83 passed
 ```
 
 ## Example Programs
@@ -328,7 +355,8 @@ The larger examples are also represented in backend functional tests using manua
 
 ## Current Limitations
 
-User-defined `FUNCTION` and `SUBROUTINE` definitions are not currently implemented in the backend. The intrinsic `MOD` function is supported because it is required by the provided examples.
+
+The compiler includes parser-level support for user-defined `FUNCTION` and `SUBROUTINE` definitions. However, full end-to-end support for user-defined subprograms is not implemented yet. The intrinsic `MOD` function is supported because it is required by the provided examples.
 
 The converter example is therefore included as an example of a program using user-defined functions, but the backend currently rejects calls such as `CONVRT(NUM, BASE)` in a controlled way.
 
@@ -336,7 +364,7 @@ Some larger examples are validated through manually constructed ASTs in the back
 
 ## Tests
 
-The project includes tests using 'pytest'.
+The project includes tests using `pytest`.
 
 The lexer tests verify that the source code is correctly transformed into tokens. They cover:
 
@@ -351,16 +379,22 @@ The lexer tests verify that the source code is correctly transformed into tokens
 
 The parser tests verify that valid Fortran-like programs are correctly transformed into AST structures. They cover:
 
-- a minimal 'HELLO' program;
+- a minimal `HELLO` program;
 - variable declarations and assignments;
-- 'IF' statements;
-- labelled 'Do' loops;
-- 'GOTO' statements.
+- `IF` statements;
+- labelled `Do` loops;
+- `GOTO` statements.
+- Array declarations, verifying that the array name and size are stored correctly in the `Declaration` node.
+- Functions calls with multiple arguments, verifying that they are parsed as `FunctionCall`nodes.
+- User-defined `FUNCTION` and `SUBROUTINE` definitions.
+- Multiple subprograms in the same source file.
+
+All parser tests verify both the structure of the AST and the specific values of the relevant fields, such as labels, variable names and node types.
 
 At the current stage, all available tests pass successfully:
 
 ```text
-79 passed
+83 passed
 ```
 
 ## Execution Instructions
