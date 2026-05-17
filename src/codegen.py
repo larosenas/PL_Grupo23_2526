@@ -12,8 +12,9 @@ from src.ast_nodes import (
     GOTO,
     Continue,
     Do,
-    FuntionalCall,
+    FunctionCall,
     ArrayAccess,
+    UnaryOp,
 )
 from src.errors import CodeGenerationError
 
@@ -162,7 +163,7 @@ class CodeGenerator:
         if isinstance(expression, Boolean):
             return [f"PUSHI {1 if expression.value else 0}"]
 
-        if isinstance(expression, FuntionalCall):
+        if isinstance(expression, FunctionCall):
             return self._function_call(expression)
 
         if isinstance(expression, ArrayAccess):
@@ -170,6 +171,8 @@ class CodeGenerator:
             code.extend(self._array_address(expression))
             code.append("LOAD 0")
             return code
+        if isinstance(expression, UnaryOp):
+            return self._unary_expression(expression)
 
         raise CodeGenerationError(
             f"Unsupported expression: {type(expression).__name__}"
@@ -184,7 +187,7 @@ class CodeGenerator:
             if isinstance(expression.value, float):
                 return "REAL"
             return "INTEGER"
-        
+
         if isinstance(expression, Boolean):
             return "LOGICAL"
 
@@ -198,6 +201,9 @@ class CodeGenerator:
 
         if isinstance(expression, BinaryOp):
             op = expression.op.upper()
+
+            if op in {".NOT.", "NOT"} and expression.right is None:
+                return "LOGICAL"
 
             if op in {
                 ".EQ.",
@@ -227,7 +233,7 @@ class CodeGenerator:
 
             return "INTEGER"
 
-        if isinstance(expression, FuntionalCall):
+        if isinstance(expression, FunctionCall):
             if expression.name.upper() == "MOD":
                 return "INTEGER"
 
@@ -240,6 +246,13 @@ class CodeGenerator:
                 raise CodeGenerationError(f"Array '{key}' has no declared type")
 
             return self.types[key]
+        if isinstance(expression, UnaryOp):
+            op = expression.op.upper()
+
+            if op in {".NOT.", "NOT"}:
+                return "LOGICAL"
+
+            raise CodeGenerationError(f"Unsupported unary operator '{expression.op}'")
 
         raise CodeGenerationError(
             f"Cannot determine expression type: {type(expression).__name__}"
@@ -269,8 +282,19 @@ class CodeGenerator:
         # Generate code for binary operations, mapping operators to VM instructions.
         code = []
 
-        # Evaluate left and right operands before emitting the operator.
+        # Evaluate the left operand first, as the operator will consume both from the stack.
         code.extend(self._expression(expression.left))
+
+        # Handle unary NOT as a special case since it only has one operand on the left.
+        op = expression.op.upper()
+
+        if op in {".NOT.", "NOT"} and expression.right is None:
+            code = []
+            code.extend(self._expression(expression.left))
+            code.append("NOT")
+            return code
+
+        # Evaluate the right operand after the left, as the operator will consume both from the stack.
         code.extend(self._expression(expression.right))
 
         # Map of operators to VM opcodes
@@ -521,3 +545,14 @@ class CodeGenerator:
         code.append("PADD")
 
         return code
+
+    def _unary_expression(self, expression):
+        op = expression.op.upper()
+
+        if op in {".NOT.", "NOT"}:
+            code = []
+            code.extend(self._expression(expression.operand))
+            code.append("NOT")
+            return code
+
+        raise CodeGenerationError(f"Unsupported unary operator '{expression.op}'")

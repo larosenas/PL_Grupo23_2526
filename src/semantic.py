@@ -16,7 +16,7 @@ from src.ast_nodes import (
     Continue,
     Declaration,
     Do,
-    FuntionalCall,
+    FunctionCall,
     GOTO,
     If,
     Number,
@@ -26,6 +26,7 @@ from src.ast_nodes import (
     Return,
     String,
     Variable,
+    UnaryOp,
 )
 
 # Import custom error class for semantic errors
@@ -397,11 +398,31 @@ class SemanticAnalyzer:
             return self._binary_expression_type(expression)
 
         # Handle function calls
-        if isinstance(expression, FuntionalCall):
+        if isinstance(expression, FunctionCall):
             return self._function_call_type(expression)
+
+        # Handle unary operations (e.g., negation, logical NOT)
+        if isinstance(expression, UnaryOp):
+            return self._unary_expression_type(expression)
 
         # If we reach here, the expression type is not supported
         raise SemanticError(f"Unsupported expression node: {type(expression).__name__}")
+
+    def _unary_expression_type(self, expression: UnaryOp) -> str:
+        op = expression.op.upper()
+        operand_type = self._expression_type(expression.operand)
+
+        if op == "-":
+            if operand_type not in NUMERIC_TYPES:
+                raise SemanticError("Unary '-' operator requires a numeric operand")
+            return operand_type  # Result type is the same as operand type
+
+        if op in {".NOT.", "NOT"}:
+            if operand_type != LOGICAL:
+                raise SemanticError("Unary NOT operator requires a LOGICAL operand")
+            return LOGICAL
+
+        raise SemanticError(f"Unsupported unary operator '{expression.op}'")
 
     def _binary_expression_type(self, expression: BinaryOp) -> str:
         """
@@ -414,6 +435,16 @@ class SemanticAnalyzer:
         """
         # Get operator and operand types
         op = expression.op.upper()
+
+        # Handle unary NOT as a special case since it only has one operand
+        if op in {".NOT.", "NOT"} and expression.right is None:
+            operand_type = self._expression_type(expression.left)
+
+            if operand_type != LOGICAL:
+                raise SemanticError("Logical NOT requires a LOGICAL operand")
+
+            return LOGICAL
+
         left_type = self._expression_type(expression.left)
         right_type = self._expression_type(expression.right)
 
@@ -467,7 +498,7 @@ class SemanticAnalyzer:
         # If we reach here, the operator is not supported
         raise SemanticError(f"Unsupported binary operator '{expression.op}'")
 
-    def _function_call_type(self, expression: FuntionalCall) -> str:
+    def _function_call_type(self, expression: FunctionCall) -> str:
         # Get function name and arguments
         name = expression.name.upper()
         arguments = expression.arguments
