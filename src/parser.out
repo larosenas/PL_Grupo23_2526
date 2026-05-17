@@ -1,0 +1,2665 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    FUNCTION
+    RETURN
+    SEMICOLON
+    SUBROUTINE
+
+Grammar
+
+Rule 0     S' -> program
+Rule 1     program -> PROGRAM ID NEWLINE declarations statement_list END NEWLINE
+Rule 2     declarations -> empty
+Rule 3     declarations -> declarations declaration
+Rule 4     declaration -> type id_list NEWLINE
+Rule 5     type -> INTEGER
+Rule 6     type -> REAL
+Rule 7     type -> LOGICAL
+Rule 8     id_list -> ID
+Rule 9     id_list -> id_list COMMA ID
+Rule 10    expr_list -> expression
+Rule 11    expr_list -> expr_list COMMA expression
+Rule 12    statement_list -> empty
+Rule 13    statement_list -> statement_list statement
+Rule 14    statement -> assignment
+Rule 15    statement -> print_statement
+Rule 16    statement -> read_statement
+Rule 17    statement -> if_statement
+Rule 18    statement -> do_statement
+Rule 19    statement -> goto_statement
+Rule 20    statement -> continue_statement
+Rule 21    assignment -> ID ASSIGN expression NEWLINE
+Rule 22    print_statement -> PRINT TIMES COMMA expr_list NEWLINE
+Rule 23    read_statement -> READ TIMES COMMA id_list NEWLINE
+Rule 24    if_statement -> IF LPAREN expression RPAREN THEN NEWLINE statement_list ENDIF NEWLINE
+Rule 25    if_statement -> IF LPAREN expression RPAREN THEN NEWLINE statement_list ELSE NEWLINE statement_list ENDIF NEWLINE
+Rule 26    do_statement -> DO INT_NUMBER ID ASSIGN expression COMMA expression NEWLINE statement_list CONTINUE
+Rule 27    goto_statement -> GOTO INT_NUMBER NEWLINE
+Rule 28    continue_statement -> INT_NUMBER CONTINUE NEWLINE
+Rule 29    expression -> expression PLUS expression
+Rule 30    expression -> expression MINUS expression
+Rule 31    expression -> expression TIMES expression
+Rule 32    expression -> expression DIVIDE expression
+Rule 33    expression -> expression EQ expression
+Rule 34    expression -> expression NE expression
+Rule 35    expression -> expression LT expression
+Rule 36    expression -> expression LE expression
+Rule 37    expression -> expression GT expression
+Rule 38    expression -> expression GE expression
+Rule 39    expression -> expression AND expression
+Rule 40    expression -> expression OR expression
+Rule 41    expression -> NOT expression
+Rule 42    expression -> INT_NUMBER
+Rule 43    expression -> REAL_NUMBER
+Rule 44    expression -> ID
+Rule 45    expression -> STRING
+Rule 46    expression -> TRUE
+Rule 47    expression -> FALSE
+Rule 48    expression -> LPAREN expression RPAREN
+Rule 49    empty -> <empty>
+
+Terminals, with rules where they appear
+
+AND                  : 39
+ASSIGN               : 21 26
+COMMA                : 9 11 22 23 26
+CONTINUE             : 26 28
+DIVIDE               : 32
+DO                   : 26
+ELSE                 : 25
+END                  : 1
+ENDIF                : 24 25
+EQ                   : 33
+FALSE                : 47
+FUNCTION             : 
+GE                   : 38
+GOTO                 : 27
+GT                   : 37
+ID                   : 1 8 9 21 26 44
+IF                   : 24 25
+INTEGER              : 5
+INT_NUMBER           : 26 27 28 42
+LE                   : 36
+LOGICAL              : 7
+LPAREN               : 24 25 48
+LT                   : 35
+MINUS                : 30
+NE                   : 34
+NEWLINE              : 1 1 4 21 22 23 24 24 25 25 25 26 27 28
+NOT                  : 41
+OR                   : 40
+PLUS                 : 29
+PRINT                : 22
+PROGRAM              : 1
+READ                 : 23
+REAL                 : 6
+REAL_NUMBER          : 43
+RETURN               : 
+RPAREN               : 24 25 48
+SEMICOLON            : 
+STRING               : 45
+SUBROUTINE           : 
+THEN                 : 24 25
+TIMES                : 22 23 31
+TRUE                 : 46
+error                : 
+
+Nonterminals, with rules where they appear
+
+assignment           : 14
+continue_statement   : 20
+declaration          : 3
+declarations         : 1 3
+do_statement         : 18
+empty                : 2 12
+expr_list            : 11 22
+expression           : 10 11 21 24 25 26 26 29 29 30 30 31 31 32 32 33 33 34 34 35 35 36 36 37 37 38 38 39 39 40 40 41 48
+goto_statement       : 19
+id_list              : 4 9 23
+if_statement         : 17
+print_statement      : 15
+program              : 0
+read_statement       : 16
+statement            : 13
+statement_list       : 1 13 24 25 25 26
+type                 : 4
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . program
+    (1) program -> . PROGRAM ID NEWLINE declarations statement_list END NEWLINE
+
+    PROGRAM         shift and go to state 2
+
+    program                        shift and go to state 1
+
+state 1
+
+    (0) S' -> program .
+
+
+
+state 2
+
+    (1) program -> PROGRAM . ID NEWLINE declarations statement_list END NEWLINE
+
+    ID              shift and go to state 3
+
+
+state 3
+
+    (1) program -> PROGRAM ID . NEWLINE declarations statement_list END NEWLINE
+
+    NEWLINE         shift and go to state 4
+
+
+state 4
+
+    (1) program -> PROGRAM ID NEWLINE . declarations statement_list END NEWLINE
+    (2) declarations -> . empty
+    (3) declarations -> . declarations declaration
+    (49) empty -> .
+
+    INTEGER         reduce using rule 49 (empty -> .)
+    REAL            reduce using rule 49 (empty -> .)
+    LOGICAL         reduce using rule 49 (empty -> .)
+    END             reduce using rule 49 (empty -> .)
+    ID              reduce using rule 49 (empty -> .)
+    PRINT           reduce using rule 49 (empty -> .)
+    READ            reduce using rule 49 (empty -> .)
+    IF              reduce using rule 49 (empty -> .)
+    DO              reduce using rule 49 (empty -> .)
+    GOTO            reduce using rule 49 (empty -> .)
+    INT_NUMBER      reduce using rule 49 (empty -> .)
+
+    declarations                   shift and go to state 5
+    empty                          shift and go to state 6
+
+state 5
+
+    (1) program -> PROGRAM ID NEWLINE declarations . statement_list END NEWLINE
+    (3) declarations -> declarations . declaration
+    (12) statement_list -> . empty
+    (13) statement_list -> . statement_list statement
+    (4) declaration -> . type id_list NEWLINE
+    (49) empty -> .
+    (5) type -> . INTEGER
+    (6) type -> . REAL
+    (7) type -> . LOGICAL
+
+    END             reduce using rule 49 (empty -> .)
+    ID              reduce using rule 49 (empty -> .)
+    PRINT           reduce using rule 49 (empty -> .)
+    READ            reduce using rule 49 (empty -> .)
+    IF              reduce using rule 49 (empty -> .)
+    DO              reduce using rule 49 (empty -> .)
+    GOTO            reduce using rule 49 (empty -> .)
+    INT_NUMBER      reduce using rule 49 (empty -> .)
+    INTEGER         shift and go to state 11
+    REAL            shift and go to state 12
+    LOGICAL         shift and go to state 13
+
+    statement_list                 shift and go to state 7
+    declaration                    shift and go to state 8
+    empty                          shift and go to state 9
+    type                           shift and go to state 10
+
+state 6
+
+    (2) declarations -> empty .
+
+    INTEGER         reduce using rule 2 (declarations -> empty .)
+    REAL            reduce using rule 2 (declarations -> empty .)
+    LOGICAL         reduce using rule 2 (declarations -> empty .)
+    END             reduce using rule 2 (declarations -> empty .)
+    ID              reduce using rule 2 (declarations -> empty .)
+    PRINT           reduce using rule 2 (declarations -> empty .)
+    READ            reduce using rule 2 (declarations -> empty .)
+    IF              reduce using rule 2 (declarations -> empty .)
+    DO              reduce using rule 2 (declarations -> empty .)
+    GOTO            reduce using rule 2 (declarations -> empty .)
+    INT_NUMBER      reduce using rule 2 (declarations -> empty .)
+
+
+state 7
+
+    (1) program -> PROGRAM ID NEWLINE declarations statement_list . END NEWLINE
+    (13) statement_list -> statement_list . statement
+    (14) statement -> . assignment
+    (15) statement -> . print_statement
+    (16) statement -> . read_statement
+    (17) statement -> . if_statement
+    (18) statement -> . do_statement
+    (19) statement -> . goto_statement
+    (20) statement -> . continue_statement
+    (21) assignment -> . ID ASSIGN expression NEWLINE
+    (22) print_statement -> . PRINT TIMES COMMA expr_list NEWLINE
+    (23) read_statement -> . READ TIMES COMMA id_list NEWLINE
+    (24) if_statement -> . IF LPAREN expression RPAREN THEN NEWLINE statement_list ENDIF NEWLINE
+    (25) if_statement -> . IF LPAREN expression RPAREN THEN NEWLINE statement_list ELSE NEWLINE statement_list ENDIF NEWLINE
+    (26) do_statement -> . DO INT_NUMBER ID ASSIGN expression COMMA expression NEWLINE statement_list CONTINUE
+    (27) goto_statement -> . GOTO INT_NUMBER NEWLINE
+    (28) continue_statement -> . INT_NUMBER CONTINUE NEWLINE
+
+    END             shift and go to state 15
+    ID              shift and go to state 14
+    PRINT           shift and go to state 24
+    READ            shift and go to state 25
+    IF              shift and go to state 26
+    DO              shift and go to state 27
+    GOTO            shift and go to state 29
+    INT_NUMBER      shift and go to state 28
+
+    statement                      shift and go to state 16
+    assignment                     shift and go to state 17
+    print_statement                shift and go to state 18
+    read_statement                 shift and go to state 19
+    if_statement                   shift and go to state 20
+    do_statement                   shift and go to state 21
+    goto_statement                 shift and go to state 22
+    continue_statement             shift and go to state 23
+
+state 8
+
+    (3) declarations -> declarations declaration .
+
+    INTEGER         reduce using rule 3 (declarations -> declarations declaration .)
+    REAL            reduce using rule 3 (declarations -> declarations declaration .)
+    LOGICAL         reduce using rule 3 (declarations -> declarations declaration .)
+    END             reduce using rule 3 (declarations -> declarations declaration .)
+    ID              reduce using rule 3 (declarations -> declarations declaration .)
+    PRINT           reduce using rule 3 (declarations -> declarations declaration .)
+    READ            reduce using rule 3 (declarations -> declarations declaration .)
+    IF              reduce using rule 3 (declarations -> declarations declaration .)
+    DO              reduce using rule 3 (declarations -> declarations declaration .)
+    GOTO            reduce using rule 3 (declarations -> declarations declaration .)
+    INT_NUMBER      reduce using rule 3 (declarations -> declarations declaration .)
+
+
+state 9
+
+    (12) statement_list -> empty .
+
+    END             reduce using rule 12 (statement_list -> empty .)
+    ID              reduce using rule 12 (statement_list -> empty .)
+    PRINT           reduce using rule 12 (statement_list -> empty .)
+    READ            reduce using rule 12 (statement_list -> empty .)
+    IF              reduce using rule 12 (statement_list -> empty .)
+    DO              reduce using rule 12 (statement_list -> empty .)
+    GOTO            reduce using rule 12 (statement_list -> empty .)
+    INT_NUMBER      reduce using rule 12 (statement_list -> empty .)
+    ENDIF           reduce using rule 12 (statement_list -> empty .)
+    ELSE            reduce using rule 12 (statement_list -> empty .)
+    CONTINUE        reduce using rule 12 (statement_list -> empty .)
+
+
+state 10
+
+    (4) declaration -> type . id_list NEWLINE
+    (8) id_list -> . ID
+    (9) id_list -> . id_list COMMA ID
+
+    ID              shift and go to state 31
+
+    id_list                        shift and go to state 30
+
+state 11
+
+    (5) type -> INTEGER .
+
+    ID              reduce using rule 5 (type -> INTEGER .)
+
+
+state 12
+
+    (6) type -> REAL .
+
+    ID              reduce using rule 6 (type -> REAL .)
+
+
+state 13
+
+    (7) type -> LOGICAL .
+
+    ID              reduce using rule 7 (type -> LOGICAL .)
+
+
+state 14
+
+    (21) assignment -> ID . ASSIGN expression NEWLINE
+
+    ASSIGN          shift and go to state 32
+
+
+state 15
+
+    (1) program -> PROGRAM ID NEWLINE declarations statement_list END . NEWLINE
+
+    NEWLINE         shift and go to state 33
+
+
+state 16
+
+    (13) statement_list -> statement_list statement .
+
+    END             reduce using rule 13 (statement_list -> statement_list statement .)
+    ID              reduce using rule 13 (statement_list -> statement_list statement .)
+    PRINT           reduce using rule 13 (statement_list -> statement_list statement .)
+    READ            reduce using rule 13 (statement_list -> statement_list statement .)
+    IF              reduce using rule 13 (statement_list -> statement_list statement .)
+    DO              reduce using rule 13 (statement_list -> statement_list statement .)
+    GOTO            reduce using rule 13 (statement_list -> statement_list statement .)
+    INT_NUMBER      reduce using rule 13 (statement_list -> statement_list statement .)
+    ENDIF           reduce using rule 13 (statement_list -> statement_list statement .)
+    ELSE            reduce using rule 13 (statement_list -> statement_list statement .)
+    CONTINUE        reduce using rule 13 (statement_list -> statement_list statement .)
+
+
+state 17
+
+    (14) statement -> assignment .
+
+    END             reduce using rule 14 (statement -> assignment .)
+    ID              reduce using rule 14 (statement -> assignment .)
+    PRINT           reduce using rule 14 (statement -> assignment .)
+    READ            reduce using rule 14 (statement -> assignment .)
+    IF              reduce using rule 14 (statement -> assignment .)
+    DO              reduce using rule 14 (statement -> assignment .)
+    GOTO            reduce using rule 14 (statement -> assignment .)
+    INT_NUMBER      reduce using rule 14 (statement -> assignment .)
+    ENDIF           reduce using rule 14 (statement -> assignment .)
+    ELSE            reduce using rule 14 (statement -> assignment .)
+    CONTINUE        reduce using rule 14 (statement -> assignment .)
+
+
+state 18
+
+    (15) statement -> print_statement .
+
+    END             reduce using rule 15 (statement -> print_statement .)
+    ID              reduce using rule 15 (statement -> print_statement .)
+    PRINT           reduce using rule 15 (statement -> print_statement .)
+    READ            reduce using rule 15 (statement -> print_statement .)
+    IF              reduce using rule 15 (statement -> print_statement .)
+    DO              reduce using rule 15 (statement -> print_statement .)
+    GOTO            reduce using rule 15 (statement -> print_statement .)
+    INT_NUMBER      reduce using rule 15 (statement -> print_statement .)
+    ENDIF           reduce using rule 15 (statement -> print_statement .)
+    ELSE            reduce using rule 15 (statement -> print_statement .)
+    CONTINUE        reduce using rule 15 (statement -> print_statement .)
+
+
+state 19
+
+    (16) statement -> read_statement .
+
+    END             reduce using rule 16 (statement -> read_statement .)
+    ID              reduce using rule 16 (statement -> read_statement .)
+    PRINT           reduce using rule 16 (statement -> read_statement .)
+    READ            reduce using rule 16 (statement -> read_statement .)
+    IF              reduce using rule 16 (statement -> read_statement .)
+    DO              reduce using rule 16 (statement -> read_statement .)
+    GOTO            reduce using rule 16 (statement -> read_statement .)
+    INT_NUMBER      reduce using rule 16 (statement -> read_statement .)
+    ENDIF           reduce using rule 16 (statement -> read_statement .)
+    ELSE            reduce using rule 16 (statement -> read_statement .)
+    CONTINUE        reduce using rule 16 (statement -> read_statement .)
+
+
+state 20
+
+    (17) statement -> if_statement .
+
+    END             reduce using rule 17 (statement -> if_statement .)
+    ID              reduce using rule 17 (statement -> if_statement .)
+    PRINT           reduce using rule 17 (statement -> if_statement .)
+    READ            reduce using rule 17 (statement -> if_statement .)
+    IF              reduce using rule 17 (statement -> if_statement .)
+    DO              reduce using rule 17 (statement -> if_statement .)
+    GOTO            reduce using rule 17 (statement -> if_statement .)
+    INT_NUMBER      reduce using rule 17 (statement -> if_statement .)
+    ENDIF           reduce using rule 17 (statement -> if_statement .)
+    ELSE            reduce using rule 17 (statement -> if_statement .)
+    CONTINUE        reduce using rule 17 (statement -> if_statement .)
+
+
+state 21
+
+    (18) statement -> do_statement .
+
+    END             reduce using rule 18 (statement -> do_statement .)
+    ID              reduce using rule 18 (statement -> do_statement .)
+    PRINT           reduce using rule 18 (statement -> do_statement .)
+    READ            reduce using rule 18 (statement -> do_statement .)
+    IF              reduce using rule 18 (statement -> do_statement .)
+    DO              reduce using rule 18 (statement -> do_statement .)
+    GOTO            reduce using rule 18 (statement -> do_statement .)
+    INT_NUMBER      reduce using rule 18 (statement -> do_statement .)
+    ENDIF           reduce using rule 18 (statement -> do_statement .)
+    ELSE            reduce using rule 18 (statement -> do_statement .)
+    CONTINUE        reduce using rule 18 (statement -> do_statement .)
+
+
+state 22
+
+    (19) statement -> goto_statement .
+
+    END             reduce using rule 19 (statement -> goto_statement .)
+    ID              reduce using rule 19 (statement -> goto_statement .)
+    PRINT           reduce using rule 19 (statement -> goto_statement .)
+    READ            reduce using rule 19 (statement -> goto_statement .)
+    IF              reduce using rule 19 (statement -> goto_statement .)
+    DO              reduce using rule 19 (statement -> goto_statement .)
+    GOTO            reduce using rule 19 (statement -> goto_statement .)
+    INT_NUMBER      reduce using rule 19 (statement -> goto_statement .)
+    ENDIF           reduce using rule 19 (statement -> goto_statement .)
+    ELSE            reduce using rule 19 (statement -> goto_statement .)
+    CONTINUE        reduce using rule 19 (statement -> goto_statement .)
+
+
+state 23
+
+    (20) statement -> continue_statement .
+
+    END             reduce using rule 20 (statement -> continue_statement .)
+    ID              reduce using rule 20 (statement -> continue_statement .)
+    PRINT           reduce using rule 20 (statement -> continue_statement .)
+    READ            reduce using rule 20 (statement -> continue_statement .)
+    IF              reduce using rule 20 (statement -> continue_statement .)
+    DO              reduce using rule 20 (statement -> continue_statement .)
+    GOTO            reduce using rule 20 (statement -> continue_statement .)
+    INT_NUMBER      reduce using rule 20 (statement -> continue_statement .)
+    ENDIF           reduce using rule 20 (statement -> continue_statement .)
+    ELSE            reduce using rule 20 (statement -> continue_statement .)
+    CONTINUE        reduce using rule 20 (statement -> continue_statement .)
+
+
+state 24
+
+    (22) print_statement -> PRINT . TIMES COMMA expr_list NEWLINE
+
+    TIMES           shift and go to state 34
+
+
+state 25
+
+    (23) read_statement -> READ . TIMES COMMA id_list NEWLINE
+
+    TIMES           shift and go to state 35
+
+
+state 26
+
+    (24) if_statement -> IF . LPAREN expression RPAREN THEN NEWLINE statement_list ENDIF NEWLINE
+    (25) if_statement -> IF . LPAREN expression RPAREN THEN NEWLINE statement_list ELSE NEWLINE statement_list ENDIF NEWLINE
+
+    LPAREN          shift and go to state 36
+
+
+state 27
+
+    (26) do_statement -> DO . INT_NUMBER ID ASSIGN expression COMMA expression NEWLINE statement_list CONTINUE
+
+    INT_NUMBER      shift and go to state 37
+
+
+state 28
+
+    (28) continue_statement -> INT_NUMBER . CONTINUE NEWLINE
+
+    CONTINUE        shift and go to state 38
+
+
+state 29
+
+    (27) goto_statement -> GOTO . INT_NUMBER NEWLINE
+
+    INT_NUMBER      shift and go to state 39
+
+
+state 30
+
+    (4) declaration -> type id_list . NEWLINE
+    (9) id_list -> id_list . COMMA ID
+
+    NEWLINE         shift and go to state 40
+    COMMA           shift and go to state 41
+
+
+state 31
+
+    (8) id_list -> ID .
+
+    NEWLINE         reduce using rule 8 (id_list -> ID .)
+    COMMA           reduce using rule 8 (id_list -> ID .)
+
+
+state 32
+
+    (21) assignment -> ID ASSIGN . expression NEWLINE
+    (29) expression -> . expression PLUS expression
+    (30) expression -> . expression MINUS expression
+    (31) expression -> . expression TIMES expression
+    (32) expression -> . expression DIVIDE expression
+    (33) expression -> . expression EQ expression
+    (34) expression -> . expression NE expression
+    (35) expression -> . expression LT expression
+    (36) expression -> . expression LE expression
+    (37) expression -> . expression GT expression
+    (38) expression -> . expression GE expression
+    (39) expression -> . expression AND expression
+    (40) expression -> . expression OR expression
+    (41) expression -> . NOT expression
+    (42) expression -> . INT_NUMBER
+    (43) expression -> . REAL_NUMBER
+    (44) expression -> . ID
+    (45) expression -> . STRING
+    (46) expression -> . TRUE
+    (47) expression -> . FALSE
+    (48) expression -> . LPAREN expression RPAREN
+
+    NOT             shift and go to state 44
+    INT_NUMBER      shift and go to state 45
+    REAL_NUMBER     shift and go to state 46
+    ID              shift and go to state 42
+    STRING          shift and go to state 47
+    TRUE            shift and go to state 48
+    FALSE           shift and go to state 49
+    LPAREN          shift and go to state 50
+
+    expression                     shift and go to state 43
+
+state 33
+
+    (1) program -> PROGRAM ID NEWLINE declarations statement_list END NEWLINE .
+
+    $end            reduce using rule 1 (program -> PROGRAM ID NEWLINE declarations statement_list END NEWLINE .)
+
+
+state 34
+
+    (22) print_statement -> PRINT TIMES . COMMA expr_list NEWLINE
+
+    COMMA           shift and go to state 51
+
+
+state 35
+
+    (23) read_statement -> READ TIMES . COMMA id_list NEWLINE
+
+    COMMA           shift and go to state 52
+
+
+state 36
+
+    (24) if_statement -> IF LPAREN . expression RPAREN THEN NEWLINE statement_list ENDIF NEWLINE
+    (25) if_statement -> IF LPAREN . expression RPAREN THEN NEWLINE statement_list ELSE NEWLINE statement_list ENDIF NEWLINE
+    (29) expression -> . expression PLUS expression
+    (30) expression -> . expression MINUS expression
+    (31) expression -> . expression TIMES expression
+    (32) expression -> . expression DIVIDE expression
+    (33) expression -> . expression EQ expression
+    (34) expression -> . expression NE expression
+    (35) expression -> . expression LT expression
+    (36) expression -> . expression LE expression
+    (37) expression -> . expression GT expression
+    (38) expression -> . expression GE expression
+    (39) expression -> . expression AND expression
+    (40) expression -> . expression OR expression
+    (41) expression -> . NOT expression
+    (42) expression -> . INT_NUMBER
+    (43) expression -> . REAL_NUMBER
+    (44) expression -> . ID
+    (45) expression -> . STRING
+    (46) expression -> . TRUE
+    (47) expression -> . FALSE
+    (48) expression -> . LPAREN expression RPAREN
+
+    NOT             shift and go to state 44
+    INT_NUMBER      shift and go to state 45
+    REAL_NUMBER     shift and go to state 46
+    ID              shift and go to state 42
+    STRING          shift and go to state 47
+    TRUE            shift and go to state 48
+    FALSE           shift and go to state 49
+    LPAREN          shift and go to state 50
+
+    expression                     shift and go to state 53
+
+state 37
+
+    (26) do_statement -> DO INT_NUMBER . ID ASSIGN expression COMMA expression NEWLINE statement_list CONTINUE
+
+    ID              shift and go to state 54
+
+
+state 38
+
+    (28) continue_statement -> INT_NUMBER CONTINUE . NEWLINE
+
+    NEWLINE         shift and go to state 55
+
+
+state 39
+
+    (27) goto_statement -> GOTO INT_NUMBER . NEWLINE
+
+    NEWLINE         shift and go to state 56
+
+
+state 40
+
+    (4) declaration -> type id_list NEWLINE .
+
+    INTEGER         reduce using rule 4 (declaration -> type id_list NEWLINE .)
+    REAL            reduce using rule 4 (declaration -> type id_list NEWLINE .)
+    LOGICAL         reduce using rule 4 (declaration -> type id_list NEWLINE .)
+    END             reduce using rule 4 (declaration -> type id_list NEWLINE .)
+    ID              reduce using rule 4 (declaration -> type id_list NEWLINE .)
+    PRINT           reduce using rule 4 (declaration -> type id_list NEWLINE .)
+    READ            reduce using rule 4 (declaration -> type id_list NEWLINE .)
+    IF              reduce using rule 4 (declaration -> type id_list NEWLINE .)
+    DO              reduce using rule 4 (declaration -> type id_list NEWLINE .)
+    GOTO            reduce using rule 4 (declaration -> type id_list NEWLINE .)
+    INT_NUMBER      reduce using rule 4 (declaration -> type id_list NEWLINE .)
+
+
+state 41
+
+    (9) id_list -> id_list COMMA . ID
+
+    ID              shift and go to state 57
+
+
+state 42
+
+    (44) expression -> ID .
+
+    NEWLINE         reduce using rule 44 (expression -> ID .)
+    PLUS            reduce using rule 44 (expression -> ID .)
+    MINUS           reduce using rule 44 (expression -> ID .)
+    TIMES           reduce using rule 44 (expression -> ID .)
+    DIVIDE          reduce using rule 44 (expression -> ID .)
+    EQ              reduce using rule 44 (expression -> ID .)
+    NE              reduce using rule 44 (expression -> ID .)
+    LT              reduce using rule 44 (expression -> ID .)
+    LE              reduce using rule 44 (expression -> ID .)
+    GT              reduce using rule 44 (expression -> ID .)
+    GE              reduce using rule 44 (expression -> ID .)
+    AND             reduce using rule 44 (expression -> ID .)
+    OR              reduce using rule 44 (expression -> ID .)
+    RPAREN          reduce using rule 44 (expression -> ID .)
+    COMMA           reduce using rule 44 (expression -> ID .)
+
+
+state 43
+
+    (21) assignment -> ID ASSIGN expression . NEWLINE
+    (29) expression -> expression . PLUS expression
+    (30) expression -> expression . MINUS expression
+    (31) expression -> expression . TIMES expression
+    (32) expression -> expression . DIVIDE expression
+    (33) expression -> expression . EQ expression
+    (34) expression -> expression . NE expression
+    (35) expression -> expression . LT expression
+    (36) expression -> expression . LE expression
+    (37) expression -> expression . GT expression
+    (38) expression -> expression . GE expression
+    (39) expression -> expression . AND expression
+    (40) expression -> expression . OR expression
+
+    NEWLINE         shift and go to state 58
+    PLUS            shift and go to state 59
+    MINUS           shift and go to state 60
+    TIMES           shift and go to state 61
+    DIVIDE          shift and go to state 62
+    EQ              shift and go to state 63
+    NE              shift and go to state 64
+    LT              shift and go to state 65
+    LE              shift and go to state 66
+    GT              shift and go to state 67
+    GE              shift and go to state 68
+    AND             shift and go to state 69
+    OR              shift and go to state 70
+
+
+state 44
+
+    (41) expression -> NOT . expression
+    (29) expression -> . expression PLUS expression
+    (30) expression -> . expression MINUS expression
+    (31) expression -> . expression TIMES expression
+    (32) expression -> . expression DIVIDE expression
+    (33) expression -> . expression EQ expression
+    (34) expression -> . expression NE expression
+    (35) expression -> . expression LT expression
+    (36) expression -> . expression LE expression
+    (37) expression -> . expression GT expression
+    (38) expression -> . expression GE expression
+    (39) expression -> . expression AND expression
+    (40) expression -> . expression OR expression
+    (41) expression -> . NOT expression
+    (42) expression -> . INT_NUMBER
+    (43) expression -> . REAL_NUMBER
+    (44) expression -> . ID
+    (45) expression -> . STRING
+    (46) expression -> . TRUE
+    (47) expression -> . FALSE
+    (48) expression -> . LPAREN expression RPAREN
+
+    NOT             shift and go to state 44
+    INT_NUMBER      shift and go to state 45
+    REAL_NUMBER     shift and go to state 46
+    ID              shift and go to state 42
+    STRING          shift and go to state 47
+    TRUE            shift and go to state 48
+    FALSE           shift and go to state 49
+    LPAREN          shift and go to state 50
+
+    expression                     shift and go to state 71
+
+state 45
+
+    (42) expression -> INT_NUMBER .
+
+    NEWLINE         reduce using rule 42 (expression -> INT_NUMBER .)
+    PLUS            reduce using rule 42 (expression -> INT_NUMBER .)
+    MINUS           reduce using rule 42 (expression -> INT_NUMBER .)
+    TIMES           reduce using rule 42 (expression -> INT_NUMBER .)
+    DIVIDE          reduce using rule 42 (expression -> INT_NUMBER .)
+    EQ              reduce using rule 42 (expression -> INT_NUMBER .)
+    NE              reduce using rule 42 (expression -> INT_NUMBER .)
+    LT              reduce using rule 42 (expression -> INT_NUMBER .)
+    LE              reduce using rule 42 (expression -> INT_NUMBER .)
+    GT              reduce using rule 42 (expression -> INT_NUMBER .)
+    GE              reduce using rule 42 (expression -> INT_NUMBER .)
+    AND             reduce using rule 42 (expression -> INT_NUMBER .)
+    OR              reduce using rule 42 (expression -> INT_NUMBER .)
+    RPAREN          reduce using rule 42 (expression -> INT_NUMBER .)
+    COMMA           reduce using rule 42 (expression -> INT_NUMBER .)
+
+
+state 46
+
+    (43) expression -> REAL_NUMBER .
+
+    NEWLINE         reduce using rule 43 (expression -> REAL_NUMBER .)
+    PLUS            reduce using rule 43 (expression -> REAL_NUMBER .)
+    MINUS           reduce using rule 43 (expression -> REAL_NUMBER .)
+    TIMES           reduce using rule 43 (expression -> REAL_NUMBER .)
+    DIVIDE          reduce using rule 43 (expression -> REAL_NUMBER .)
+    EQ              reduce using rule 43 (expression -> REAL_NUMBER .)
+    NE              reduce using rule 43 (expression -> REAL_NUMBER .)
+    LT              reduce using rule 43 (expression -> REAL_NUMBER .)
+    LE              reduce using rule 43 (expression -> REAL_NUMBER .)
+    GT              reduce using rule 43 (expression -> REAL_NUMBER .)
+    GE              reduce using rule 43 (expression -> REAL_NUMBER .)
+    AND             reduce using rule 43 (expression -> REAL_NUMBER .)
+    OR              reduce using rule 43 (expression -> REAL_NUMBER .)
+    RPAREN          reduce using rule 43 (expression -> REAL_NUMBER .)
+    COMMA           reduce using rule 43 (expression -> REAL_NUMBER .)
+
+
+state 47
+
+    (45) expression -> STRING .
+
+    NEWLINE         reduce using rule 45 (expression -> STRING .)
+    PLUS            reduce using rule 45 (expression -> STRING .)
+    MINUS           reduce using rule 45 (expression -> STRING .)
+    TIMES           reduce using rule 45 (expression -> STRING .)
+    DIVIDE          reduce using rule 45 (expression -> STRING .)
+    EQ              reduce using rule 45 (expression -> STRING .)
+    NE              reduce using rule 45 (expression -> STRING .)
+    LT              reduce using rule 45 (expression -> STRING .)
+    LE              reduce using rule 45 (expression -> STRING .)
+    GT              reduce using rule 45 (expression -> STRING .)
+    GE              reduce using rule 45 (expression -> STRING .)
+    AND             reduce using rule 45 (expression -> STRING .)
+    OR              reduce using rule 45 (expression -> STRING .)
+    RPAREN          reduce using rule 45 (expression -> STRING .)
+    COMMA           reduce using rule 45 (expression -> STRING .)
+
+
+state 48
+
+    (46) expression -> TRUE .
+
+    NEWLINE         reduce using rule 46 (expression -> TRUE .)
+    PLUS            reduce using rule 46 (expression -> TRUE .)
+    MINUS           reduce using rule 46 (expression -> TRUE .)
+    TIMES           reduce using rule 46 (expression -> TRUE .)
+    DIVIDE          reduce using rule 46 (expression -> TRUE .)
+    EQ              reduce using rule 46 (expression -> TRUE .)
+    NE              reduce using rule 46 (expression -> TRUE .)
+    LT              reduce using rule 46 (expression -> TRUE .)
+    LE              reduce using rule 46 (expression -> TRUE .)
+    GT              reduce using rule 46 (expression -> TRUE .)
+    GE              reduce using rule 46 (expression -> TRUE .)
+    AND             reduce using rule 46 (expression -> TRUE .)
+    OR              reduce using rule 46 (expression -> TRUE .)
+    RPAREN          reduce using rule 46 (expression -> TRUE .)
+    COMMA           reduce using rule 46 (expression -> TRUE .)
+
+
+state 49
+
+    (47) expression -> FALSE .
+
+    NEWLINE         reduce using rule 47 (expression -> FALSE .)
+    PLUS            reduce using rule 47 (expression -> FALSE .)
+    MINUS           reduce using rule 47 (expression -> FALSE .)
+    TIMES           reduce using rule 47 (expression -> FALSE .)
+    DIVIDE          reduce using rule 47 (expression -> FALSE .)
+    EQ              reduce using rule 47 (expression -> FALSE .)
+    NE              reduce using rule 47 (expression -> FALSE .)
+    LT              reduce using rule 47 (expression -> FALSE .)
+    LE              reduce using rule 47 (expression -> FALSE .)
+    GT              reduce using rule 47 (expression -> FALSE .)
+    GE              reduce using rule 47 (expression -> FALSE .)
+    AND             reduce using rule 47 (expression -> FALSE .)
+    OR              reduce using rule 47 (expression -> FALSE .)
+    RPAREN          reduce using rule 47 (expression -> FALSE .)
+    COMMA           reduce using rule 47 (expression -> FALSE .)
+
+
+state 50
+
+    (48) expression -> LPAREN . expression RPAREN
+    (29) expression -> . expression PLUS expression
+    (30) expression -> . expression MINUS expression
+    (31) expression -> . expression TIMES expression
+    (32) expression -> . expression DIVIDE expression
+    (33) expression -> . expression EQ expression
+    (34) expression -> . expression NE expression
+    (35) expression -> . expression LT expression
+    (36) expression -> . expression LE expression
+    (37) expression -> . expression GT expression
+    (38) expression -> . expression GE expression
+    (39) expression -> . expression AND expression
+    (40) expression -> . expression OR expression
+    (41) expression -> . NOT expression
+    (42) expression -> . INT_NUMBER
+    (43) expression -> . REAL_NUMBER
+    (44) expression -> . ID
+    (45) expression -> . STRING
+    (46) expression -> . TRUE
+    (47) expression -> . FALSE
+    (48) expression -> . LPAREN expression RPAREN
+
+    NOT             shift and go to state 44
+    INT_NUMBER      shift and go to state 45
+    REAL_NUMBER     shift and go to state 46
+    ID              shift and go to state 42
+    STRING          shift and go to state 47
+    TRUE            shift and go to state 48
+    FALSE           shift and go to state 49
+    LPAREN          shift and go to state 50
+
+    expression                     shift and go to state 72
+
+state 51
+
+    (22) print_statement -> PRINT TIMES COMMA . expr_list NEWLINE
+    (10) expr_list -> . expression
+    (11) expr_list -> . expr_list COMMA expression
+    (29) expression -> . expression PLUS expression
+    (30) expression -> . expression MINUS expression
+    (31) expression -> . expression TIMES expression
+    (32) expression -> . expression DIVIDE expression
+    (33) expression -> . expression EQ expression
+    (34) expression -> . expression NE expression
+    (35) expression -> . expression LT expression
+    (36) expression -> . expression LE expression
+    (37) expression -> . expression GT expression
+    (38) expression -> . expression GE expression
+    (39) expression -> . expression AND expression
+    (40) expression -> . expression OR expression
+    (41) expression -> . NOT expression
+    (42) expression -> . INT_NUMBER
+    (43) expression -> . REAL_NUMBER
+    (44) expression -> . ID
+    (45) expression -> . STRING
+    (46) expression -> . TRUE
+    (47) expression -> . FALSE
+    (48) expression -> . LPAREN expression RPAREN
+
+    NOT             shift and go to state 44
+    INT_NUMBER      shift and go to state 45
+    REAL_NUMBER     shift and go to state 46
+    ID              shift and go to state 42
+    STRING          shift and go to state 47
+    TRUE            shift and go to state 48
+    FALSE           shift and go to state 49
+    LPAREN          shift and go to state 50
+
+    expr_list                      shift and go to state 73
+    expression                     shift and go to state 74
+
+state 52
+
+    (23) read_statement -> READ TIMES COMMA . id_list NEWLINE
+    (8) id_list -> . ID
+    (9) id_list -> . id_list COMMA ID
+
+    ID              shift and go to state 31
+
+    id_list                        shift and go to state 75
+
+state 53
+
+    (24) if_statement -> IF LPAREN expression . RPAREN THEN NEWLINE statement_list ENDIF NEWLINE
+    (25) if_statement -> IF LPAREN expression . RPAREN THEN NEWLINE statement_list ELSE NEWLINE statement_list ENDIF NEWLINE
+    (29) expression -> expression . PLUS expression
+    (30) expression -> expression . MINUS expression
+    (31) expression -> expression . TIMES expression
+    (32) expression -> expression . DIVIDE expression
+    (33) expression -> expression . EQ expression
+    (34) expression -> expression . NE expression
+    (35) expression -> expression . LT expression
+    (36) expression -> expression . LE expression
+    (37) expression -> expression . GT expression
+    (38) expression -> expression . GE expression
+    (39) expression -> expression . AND expression
+    (40) expression -> expression . OR expression
+
+    RPAREN          shift and go to state 76
+    PLUS            shift and go to state 59
+    MINUS           shift and go to state 60
+    TIMES           shift and go to state 61
+    DIVIDE          shift and go to state 62
+    EQ              shift and go to state 63
+    NE              shift and go to state 64
+    LT              shift and go to state 65
+    LE              shift and go to state 66
+    GT              shift and go to state 67
+    GE              shift and go to state 68
+    AND             shift and go to state 69
+    OR              shift and go to state 70
+
+
+state 54
+
+    (26) do_statement -> DO INT_NUMBER ID . ASSIGN expression COMMA expression NEWLINE statement_list CONTINUE
+
+    ASSIGN          shift and go to state 77
+
+
+state 55
+
+    (28) continue_statement -> INT_NUMBER CONTINUE NEWLINE .
+
+    END             reduce using rule 28 (continue_statement -> INT_NUMBER CONTINUE NEWLINE .)
+    ID              reduce using rule 28 (continue_statement -> INT_NUMBER CONTINUE NEWLINE .)
+    PRINT           reduce using rule 28 (continue_statement -> INT_NUMBER CONTINUE NEWLINE .)
+    READ            reduce using rule 28 (continue_statement -> INT_NUMBER CONTINUE NEWLINE .)
+    IF              reduce using rule 28 (continue_statement -> INT_NUMBER CONTINUE NEWLINE .)
+    DO              reduce using rule 28 (continue_statement -> INT_NUMBER CONTINUE NEWLINE .)
+    GOTO            reduce using rule 28 (continue_statement -> INT_NUMBER CONTINUE NEWLINE .)
+    INT_NUMBER      reduce using rule 28 (continue_statement -> INT_NUMBER CONTINUE NEWLINE .)
+    ENDIF           reduce using rule 28 (continue_statement -> INT_NUMBER CONTINUE NEWLINE .)
+    ELSE            reduce using rule 28 (continue_statement -> INT_NUMBER CONTINUE NEWLINE .)
+    CONTINUE        reduce using rule 28 (continue_statement -> INT_NUMBER CONTINUE NEWLINE .)
+
+
+state 56
+
+    (27) goto_statement -> GOTO INT_NUMBER NEWLINE .
+
+    END             reduce using rule 27 (goto_statement -> GOTO INT_NUMBER NEWLINE .)
+    ID              reduce using rule 27 (goto_statement -> GOTO INT_NUMBER NEWLINE .)
+    PRINT           reduce using rule 27 (goto_statement -> GOTO INT_NUMBER NEWLINE .)
+    READ            reduce using rule 27 (goto_statement -> GOTO INT_NUMBER NEWLINE .)
+    IF              reduce using rule 27 (goto_statement -> GOTO INT_NUMBER NEWLINE .)
+    DO              reduce using rule 27 (goto_statement -> GOTO INT_NUMBER NEWLINE .)
+    GOTO            reduce using rule 27 (goto_statement -> GOTO INT_NUMBER NEWLINE .)
+    INT_NUMBER      reduce using rule 27 (goto_statement -> GOTO INT_NUMBER NEWLINE .)
+    ENDIF           reduce using rule 27 (goto_statement -> GOTO INT_NUMBER NEWLINE .)
+    ELSE            reduce using rule 27 (goto_statement -> GOTO INT_NUMBER NEWLINE .)
+    CONTINUE        reduce using rule 27 (goto_statement -> GOTO INT_NUMBER NEWLINE .)
+
+
+state 57
+
+    (9) id_list -> id_list COMMA ID .
+
+    NEWLINE         reduce using rule 9 (id_list -> id_list COMMA ID .)
+    COMMA           reduce using rule 9 (id_list -> id_list COMMA ID .)
+
+
+state 58
+
+    (21) assignment -> ID ASSIGN expression NEWLINE .
+
+    END             reduce using rule 21 (assignment -> ID ASSIGN expression NEWLINE .)
+    ID              reduce using rule 21 (assignment -> ID ASSIGN expression NEWLINE .)
+    PRINT           reduce using rule 21 (assignment -> ID ASSIGN expression NEWLINE .)
+    READ            reduce using rule 21 (assignment -> ID ASSIGN expression NEWLINE .)
+    IF              reduce using rule 21 (assignment -> ID ASSIGN expression NEWLINE .)
+    DO              reduce using rule 21 (assignment -> ID ASSIGN expression NEWLINE .)
+    GOTO            reduce using rule 21 (assignment -> ID ASSIGN expression NEWLINE .)
+    INT_NUMBER      reduce using rule 21 (assignment -> ID ASSIGN expression NEWLINE .)
+    ENDIF           reduce using rule 21 (assignment -> ID ASSIGN expression NEWLINE .)
+    ELSE            reduce using rule 21 (assignment -> ID ASSIGN expression NEWLINE .)
+    CONTINUE        reduce using rule 21 (assignment -> ID ASSIGN expression NEWLINE .)
+
+
+state 59
+
+    (29) expression -> expression PLUS . expression
+    (29) expression -> . expression PLUS expression
+    (30) expression -> . expression MINUS expression
+    (31) expression -> . expression TIMES expression
+    (32) expression -> . expression DIVIDE expression
+    (33) expression -> . expression EQ expression
+    (34) expression -> . expression NE expression
+    (35) expression -> . expression LT expression
+    (36) expression -> . expression LE expression
+    (37) expression -> . expression GT expression
+    (38) expression -> . expression GE expression
+    (39) expression -> . expression AND expression
+    (40) expression -> . expression OR expression
+    (41) expression -> . NOT expression
+    (42) expression -> . INT_NUMBER
+    (43) expression -> . REAL_NUMBER
+    (44) expression -> . ID
+    (45) expression -> . STRING
+    (46) expression -> . TRUE
+    (47) expression -> . FALSE
+    (48) expression -> . LPAREN expression RPAREN
+
+    NOT             shift and go to state 44
+    INT_NUMBER      shift and go to state 45
+    REAL_NUMBER     shift and go to state 46
+    ID              shift and go to state 42
+    STRING          shift and go to state 47
+    TRUE            shift and go to state 48
+    FALSE           shift and go to state 49
+    LPAREN          shift and go to state 50
+
+    expression                     shift and go to state 78
+
+state 60
+
+    (30) expression -> expression MINUS . expression
+    (29) expression -> . expression PLUS expression
+    (30) expression -> . expression MINUS expression
+    (31) expression -> . expression TIMES expression
+    (32) expression -> . expression DIVIDE expression
+    (33) expression -> . expression EQ expression
+    (34) expression -> . expression NE expression
+    (35) expression -> . expression LT expression
+    (36) expression -> . expression LE expression
+    (37) expression -> . expression GT expression
+    (38) expression -> . expression GE expression
+    (39) expression -> . expression AND expression
+    (40) expression -> . expression OR expression
+    (41) expression -> . NOT expression
+    (42) expression -> . INT_NUMBER
+    (43) expression -> . REAL_NUMBER
+    (44) expression -> . ID
+    (45) expression -> . STRING
+    (46) expression -> . TRUE
+    (47) expression -> . FALSE
+    (48) expression -> . LPAREN expression RPAREN
+
+    NOT             shift and go to state 44
+    INT_NUMBER      shift and go to state 45
+    REAL_NUMBER     shift and go to state 46
+    ID              shift and go to state 42
+    STRING          shift and go to state 47
+    TRUE            shift and go to state 48
+    FALSE           shift and go to state 49
+    LPAREN          shift and go to state 50
+
+    expression                     shift and go to state 79
+
+state 61
+
+    (31) expression -> expression TIMES . expression
+    (29) expression -> . expression PLUS expression
+    (30) expression -> . expression MINUS expression
+    (31) expression -> . expression TIMES expression
+    (32) expression -> . expression DIVIDE expression
+    (33) expression -> . expression EQ expression
+    (34) expression -> . expression NE expression
+    (35) expression -> . expression LT expression
+    (36) expression -> . expression LE expression
+    (37) expression -> . expression GT expression
+    (38) expression -> . expression GE expression
+    (39) expression -> . expression AND expression
+    (40) expression -> . expression OR expression
+    (41) expression -> . NOT expression
+    (42) expression -> . INT_NUMBER
+    (43) expression -> . REAL_NUMBER
+    (44) expression -> . ID
+    (45) expression -> . STRING
+    (46) expression -> . TRUE
+    (47) expression -> . FALSE
+    (48) expression -> . LPAREN expression RPAREN
+
+    NOT             shift and go to state 44
+    INT_NUMBER      shift and go to state 45
+    REAL_NUMBER     shift and go to state 46
+    ID              shift and go to state 42
+    STRING          shift and go to state 47
+    TRUE            shift and go to state 48
+    FALSE           shift and go to state 49
+    LPAREN          shift and go to state 50
+
+    expression                     shift and go to state 80
+
+state 62
+
+    (32) expression -> expression DIVIDE . expression
+    (29) expression -> . expression PLUS expression
+    (30) expression -> . expression MINUS expression
+    (31) expression -> . expression TIMES expression
+    (32) expression -> . expression DIVIDE expression
+    (33) expression -> . expression EQ expression
+    (34) expression -> . expression NE expression
+    (35) expression -> . expression LT expression
+    (36) expression -> . expression LE expression
+    (37) expression -> . expression GT expression
+    (38) expression -> . expression GE expression
+    (39) expression -> . expression AND expression
+    (40) expression -> . expression OR expression
+    (41) expression -> . NOT expression
+    (42) expression -> . INT_NUMBER
+    (43) expression -> . REAL_NUMBER
+    (44) expression -> . ID
+    (45) expression -> . STRING
+    (46) expression -> . TRUE
+    (47) expression -> . FALSE
+    (48) expression -> . LPAREN expression RPAREN
+
+    NOT             shift and go to state 44
+    INT_NUMBER      shift and go to state 45
+    REAL_NUMBER     shift and go to state 46
+    ID              shift and go to state 42
+    STRING          shift and go to state 47
+    TRUE            shift and go to state 48
+    FALSE           shift and go to state 49
+    LPAREN          shift and go to state 50
+
+    expression                     shift and go to state 81
+
+state 63
+
+    (33) expression -> expression EQ . expression
+    (29) expression -> . expression PLUS expression
+    (30) expression -> . expression MINUS expression
+    (31) expression -> . expression TIMES expression
+    (32) expression -> . expression DIVIDE expression
+    (33) expression -> . expression EQ expression
+    (34) expression -> . expression NE expression
+    (35) expression -> . expression LT expression
+    (36) expression -> . expression LE expression
+    (37) expression -> . expression GT expression
+    (38) expression -> . expression GE expression
+    (39) expression -> . expression AND expression
+    (40) expression -> . expression OR expression
+    (41) expression -> . NOT expression
+    (42) expression -> . INT_NUMBER
+    (43) expression -> . REAL_NUMBER
+    (44) expression -> . ID
+    (45) expression -> . STRING
+    (46) expression -> . TRUE
+    (47) expression -> . FALSE
+    (48) expression -> . LPAREN expression RPAREN
+
+    NOT             shift and go to state 44
+    INT_NUMBER      shift and go to state 45
+    REAL_NUMBER     shift and go to state 46
+    ID              shift and go to state 42
+    STRING          shift and go to state 47
+    TRUE            shift and go to state 48
+    FALSE           shift and go to state 49
+    LPAREN          shift and go to state 50
+
+    expression                     shift and go to state 82
+
+state 64
+
+    (34) expression -> expression NE . expression
+    (29) expression -> . expression PLUS expression
+    (30) expression -> . expression MINUS expression
+    (31) expression -> . expression TIMES expression
+    (32) expression -> . expression DIVIDE expression
+    (33) expression -> . expression EQ expression
+    (34) expression -> . expression NE expression
+    (35) expression -> . expression LT expression
+    (36) expression -> . expression LE expression
+    (37) expression -> . expression GT expression
+    (38) expression -> . expression GE expression
+    (39) expression -> . expression AND expression
+    (40) expression -> . expression OR expression
+    (41) expression -> . NOT expression
+    (42) expression -> . INT_NUMBER
+    (43) expression -> . REAL_NUMBER
+    (44) expression -> . ID
+    (45) expression -> . STRING
+    (46) expression -> . TRUE
+    (47) expression -> . FALSE
+    (48) expression -> . LPAREN expression RPAREN
+
+    NOT             shift and go to state 44
+    INT_NUMBER      shift and go to state 45
+    REAL_NUMBER     shift and go to state 46
+    ID              shift and go to state 42
+    STRING          shift and go to state 47
+    TRUE            shift and go to state 48
+    FALSE           shift and go to state 49
+    LPAREN          shift and go to state 50
+
+    expression                     shift and go to state 83
+
+state 65
+
+    (35) expression -> expression LT . expression
+    (29) expression -> . expression PLUS expression
+    (30) expression -> . expression MINUS expression
+    (31) expression -> . expression TIMES expression
+    (32) expression -> . expression DIVIDE expression
+    (33) expression -> . expression EQ expression
+    (34) expression -> . expression NE expression
+    (35) expression -> . expression LT expression
+    (36) expression -> . expression LE expression
+    (37) expression -> . expression GT expression
+    (38) expression -> . expression GE expression
+    (39) expression -> . expression AND expression
+    (40) expression -> . expression OR expression
+    (41) expression -> . NOT expression
+    (42) expression -> . INT_NUMBER
+    (43) expression -> . REAL_NUMBER
+    (44) expression -> . ID
+    (45) expression -> . STRING
+    (46) expression -> . TRUE
+    (47) expression -> . FALSE
+    (48) expression -> . LPAREN expression RPAREN
+
+    NOT             shift and go to state 44
+    INT_NUMBER      shift and go to state 45
+    REAL_NUMBER     shift and go to state 46
+    ID              shift and go to state 42
+    STRING          shift and go to state 47
+    TRUE            shift and go to state 48
+    FALSE           shift and go to state 49
+    LPAREN          shift and go to state 50
+
+    expression                     shift and go to state 84
+
+state 66
+
+    (36) expression -> expression LE . expression
+    (29) expression -> . expression PLUS expression
+    (30) expression -> . expression MINUS expression
+    (31) expression -> . expression TIMES expression
+    (32) expression -> . expression DIVIDE expression
+    (33) expression -> . expression EQ expression
+    (34) expression -> . expression NE expression
+    (35) expression -> . expression LT expression
+    (36) expression -> . expression LE expression
+    (37) expression -> . expression GT expression
+    (38) expression -> . expression GE expression
+    (39) expression -> . expression AND expression
+    (40) expression -> . expression OR expression
+    (41) expression -> . NOT expression
+    (42) expression -> . INT_NUMBER
+    (43) expression -> . REAL_NUMBER
+    (44) expression -> . ID
+    (45) expression -> . STRING
+    (46) expression -> . TRUE
+    (47) expression -> . FALSE
+    (48) expression -> . LPAREN expression RPAREN
+
+    NOT             shift and go to state 44
+    INT_NUMBER      shift and go to state 45
+    REAL_NUMBER     shift and go to state 46
+    ID              shift and go to state 42
+    STRING          shift and go to state 47
+    TRUE            shift and go to state 48
+    FALSE           shift and go to state 49
+    LPAREN          shift and go to state 50
+
+    expression                     shift and go to state 85
+
+state 67
+
+    (37) expression -> expression GT . expression
+    (29) expression -> . expression PLUS expression
+    (30) expression -> . expression MINUS expression
+    (31) expression -> . expression TIMES expression
+    (32) expression -> . expression DIVIDE expression
+    (33) expression -> . expression EQ expression
+    (34) expression -> . expression NE expression
+    (35) expression -> . expression LT expression
+    (36) expression -> . expression LE expression
+    (37) expression -> . expression GT expression
+    (38) expression -> . expression GE expression
+    (39) expression -> . expression AND expression
+    (40) expression -> . expression OR expression
+    (41) expression -> . NOT expression
+    (42) expression -> . INT_NUMBER
+    (43) expression -> . REAL_NUMBER
+    (44) expression -> . ID
+    (45) expression -> . STRING
+    (46) expression -> . TRUE
+    (47) expression -> . FALSE
+    (48) expression -> . LPAREN expression RPAREN
+
+    NOT             shift and go to state 44
+    INT_NUMBER      shift and go to state 45
+    REAL_NUMBER     shift and go to state 46
+    ID              shift and go to state 42
+    STRING          shift and go to state 47
+    TRUE            shift and go to state 48
+    FALSE           shift and go to state 49
+    LPAREN          shift and go to state 50
+
+    expression                     shift and go to state 86
+
+state 68
+
+    (38) expression -> expression GE . expression
+    (29) expression -> . expression PLUS expression
+    (30) expression -> . expression MINUS expression
+    (31) expression -> . expression TIMES expression
+    (32) expression -> . expression DIVIDE expression
+    (33) expression -> . expression EQ expression
+    (34) expression -> . expression NE expression
+    (35) expression -> . expression LT expression
+    (36) expression -> . expression LE expression
+    (37) expression -> . expression GT expression
+    (38) expression -> . expression GE expression
+    (39) expression -> . expression AND expression
+    (40) expression -> . expression OR expression
+    (41) expression -> . NOT expression
+    (42) expression -> . INT_NUMBER
+    (43) expression -> . REAL_NUMBER
+    (44) expression -> . ID
+    (45) expression -> . STRING
+    (46) expression -> . TRUE
+    (47) expression -> . FALSE
+    (48) expression -> . LPAREN expression RPAREN
+
+    NOT             shift and go to state 44
+    INT_NUMBER      shift and go to state 45
+    REAL_NUMBER     shift and go to state 46
+    ID              shift and go to state 42
+    STRING          shift and go to state 47
+    TRUE            shift and go to state 48
+    FALSE           shift and go to state 49
+    LPAREN          shift and go to state 50
+
+    expression                     shift and go to state 87
+
+state 69
+
+    (39) expression -> expression AND . expression
+    (29) expression -> . expression PLUS expression
+    (30) expression -> . expression MINUS expression
+    (31) expression -> . expression TIMES expression
+    (32) expression -> . expression DIVIDE expression
+    (33) expression -> . expression EQ expression
+    (34) expression -> . expression NE expression
+    (35) expression -> . expression LT expression
+    (36) expression -> . expression LE expression
+    (37) expression -> . expression GT expression
+    (38) expression -> . expression GE expression
+    (39) expression -> . expression AND expression
+    (40) expression -> . expression OR expression
+    (41) expression -> . NOT expression
+    (42) expression -> . INT_NUMBER
+    (43) expression -> . REAL_NUMBER
+    (44) expression -> . ID
+    (45) expression -> . STRING
+    (46) expression -> . TRUE
+    (47) expression -> . FALSE
+    (48) expression -> . LPAREN expression RPAREN
+
+    NOT             shift and go to state 44
+    INT_NUMBER      shift and go to state 45
+    REAL_NUMBER     shift and go to state 46
+    ID              shift and go to state 42
+    STRING          shift and go to state 47
+    TRUE            shift and go to state 48
+    FALSE           shift and go to state 49
+    LPAREN          shift and go to state 50
+
+    expression                     shift and go to state 88
+
+state 70
+
+    (40) expression -> expression OR . expression
+    (29) expression -> . expression PLUS expression
+    (30) expression -> . expression MINUS expression
+    (31) expression -> . expression TIMES expression
+    (32) expression -> . expression DIVIDE expression
+    (33) expression -> . expression EQ expression
+    (34) expression -> . expression NE expression
+    (35) expression -> . expression LT expression
+    (36) expression -> . expression LE expression
+    (37) expression -> . expression GT expression
+    (38) expression -> . expression GE expression
+    (39) expression -> . expression AND expression
+    (40) expression -> . expression OR expression
+    (41) expression -> . NOT expression
+    (42) expression -> . INT_NUMBER
+    (43) expression -> . REAL_NUMBER
+    (44) expression -> . ID
+    (45) expression -> . STRING
+    (46) expression -> . TRUE
+    (47) expression -> . FALSE
+    (48) expression -> . LPAREN expression RPAREN
+
+    NOT             shift and go to state 44
+    INT_NUMBER      shift and go to state 45
+    REAL_NUMBER     shift and go to state 46
+    ID              shift and go to state 42
+    STRING          shift and go to state 47
+    TRUE            shift and go to state 48
+    FALSE           shift and go to state 49
+    LPAREN          shift and go to state 50
+
+    expression                     shift and go to state 89
+
+state 71
+
+    (41) expression -> NOT expression .
+    (29) expression -> expression . PLUS expression
+    (30) expression -> expression . MINUS expression
+    (31) expression -> expression . TIMES expression
+    (32) expression -> expression . DIVIDE expression
+    (33) expression -> expression . EQ expression
+    (34) expression -> expression . NE expression
+    (35) expression -> expression . LT expression
+    (36) expression -> expression . LE expression
+    (37) expression -> expression . GT expression
+    (38) expression -> expression . GE expression
+    (39) expression -> expression . AND expression
+    (40) expression -> expression . OR expression
+
+    NEWLINE         reduce using rule 41 (expression -> NOT expression .)
+    AND             reduce using rule 41 (expression -> NOT expression .)
+    OR              reduce using rule 41 (expression -> NOT expression .)
+    RPAREN          reduce using rule 41 (expression -> NOT expression .)
+    COMMA           reduce using rule 41 (expression -> NOT expression .)
+    PLUS            shift and go to state 59
+    MINUS           shift and go to state 60
+    TIMES           shift and go to state 61
+    DIVIDE          shift and go to state 62
+    EQ              shift and go to state 63
+    NE              shift and go to state 64
+    LT              shift and go to state 65
+    LE              shift and go to state 66
+    GT              shift and go to state 67
+    GE              shift and go to state 68
+
+  ! PLUS            [ reduce using rule 41 (expression -> NOT expression .) ]
+  ! MINUS           [ reduce using rule 41 (expression -> NOT expression .) ]
+  ! TIMES           [ reduce using rule 41 (expression -> NOT expression .) ]
+  ! DIVIDE          [ reduce using rule 41 (expression -> NOT expression .) ]
+  ! EQ              [ reduce using rule 41 (expression -> NOT expression .) ]
+  ! NE              [ reduce using rule 41 (expression -> NOT expression .) ]
+  ! LT              [ reduce using rule 41 (expression -> NOT expression .) ]
+  ! LE              [ reduce using rule 41 (expression -> NOT expression .) ]
+  ! GT              [ reduce using rule 41 (expression -> NOT expression .) ]
+  ! GE              [ reduce using rule 41 (expression -> NOT expression .) ]
+  ! AND             [ shift and go to state 69 ]
+  ! OR              [ shift and go to state 70 ]
+
+
+state 72
+
+    (48) expression -> LPAREN expression . RPAREN
+    (29) expression -> expression . PLUS expression
+    (30) expression -> expression . MINUS expression
+    (31) expression -> expression . TIMES expression
+    (32) expression -> expression . DIVIDE expression
+    (33) expression -> expression . EQ expression
+    (34) expression -> expression . NE expression
+    (35) expression -> expression . LT expression
+    (36) expression -> expression . LE expression
+    (37) expression -> expression . GT expression
+    (38) expression -> expression . GE expression
+    (39) expression -> expression . AND expression
+    (40) expression -> expression . OR expression
+
+    RPAREN          shift and go to state 90
+    PLUS            shift and go to state 59
+    MINUS           shift and go to state 60
+    TIMES           shift and go to state 61
+    DIVIDE          shift and go to state 62
+    EQ              shift and go to state 63
+    NE              shift and go to state 64
+    LT              shift and go to state 65
+    LE              shift and go to state 66
+    GT              shift and go to state 67
+    GE              shift and go to state 68
+    AND             shift and go to state 69
+    OR              shift and go to state 70
+
+
+state 73
+
+    (22) print_statement -> PRINT TIMES COMMA expr_list . NEWLINE
+    (11) expr_list -> expr_list . COMMA expression
+
+    NEWLINE         shift and go to state 92
+    COMMA           shift and go to state 91
+
+
+state 74
+
+    (10) expr_list -> expression .
+    (29) expression -> expression . PLUS expression
+    (30) expression -> expression . MINUS expression
+    (31) expression -> expression . TIMES expression
+    (32) expression -> expression . DIVIDE expression
+    (33) expression -> expression . EQ expression
+    (34) expression -> expression . NE expression
+    (35) expression -> expression . LT expression
+    (36) expression -> expression . LE expression
+    (37) expression -> expression . GT expression
+    (38) expression -> expression . GE expression
+    (39) expression -> expression . AND expression
+    (40) expression -> expression . OR expression
+
+    NEWLINE         reduce using rule 10 (expr_list -> expression .)
+    COMMA           reduce using rule 10 (expr_list -> expression .)
+    PLUS            shift and go to state 59
+    MINUS           shift and go to state 60
+    TIMES           shift and go to state 61
+    DIVIDE          shift and go to state 62
+    EQ              shift and go to state 63
+    NE              shift and go to state 64
+    LT              shift and go to state 65
+    LE              shift and go to state 66
+    GT              shift and go to state 67
+    GE              shift and go to state 68
+    AND             shift and go to state 69
+    OR              shift and go to state 70
+
+
+state 75
+
+    (23) read_statement -> READ TIMES COMMA id_list . NEWLINE
+    (9) id_list -> id_list . COMMA ID
+
+    NEWLINE         shift and go to state 93
+    COMMA           shift and go to state 41
+
+
+state 76
+
+    (24) if_statement -> IF LPAREN expression RPAREN . THEN NEWLINE statement_list ENDIF NEWLINE
+    (25) if_statement -> IF LPAREN expression RPAREN . THEN NEWLINE statement_list ELSE NEWLINE statement_list ENDIF NEWLINE
+
+    THEN            shift and go to state 94
+
+
+state 77
+
+    (26) do_statement -> DO INT_NUMBER ID ASSIGN . expression COMMA expression NEWLINE statement_list CONTINUE
+    (29) expression -> . expression PLUS expression
+    (30) expression -> . expression MINUS expression
+    (31) expression -> . expression TIMES expression
+    (32) expression -> . expression DIVIDE expression
+    (33) expression -> . expression EQ expression
+    (34) expression -> . expression NE expression
+    (35) expression -> . expression LT expression
+    (36) expression -> . expression LE expression
+    (37) expression -> . expression GT expression
+    (38) expression -> . expression GE expression
+    (39) expression -> . expression AND expression
+    (40) expression -> . expression OR expression
+    (41) expression -> . NOT expression
+    (42) expression -> . INT_NUMBER
+    (43) expression -> . REAL_NUMBER
+    (44) expression -> . ID
+    (45) expression -> . STRING
+    (46) expression -> . TRUE
+    (47) expression -> . FALSE
+    (48) expression -> . LPAREN expression RPAREN
+
+    NOT             shift and go to state 44
+    INT_NUMBER      shift and go to state 45
+    REAL_NUMBER     shift and go to state 46
+    ID              shift and go to state 42
+    STRING          shift and go to state 47
+    TRUE            shift and go to state 48
+    FALSE           shift and go to state 49
+    LPAREN          shift and go to state 50
+
+    expression                     shift and go to state 95
+
+state 78
+
+    (29) expression -> expression PLUS expression .
+    (29) expression -> expression . PLUS expression
+    (30) expression -> expression . MINUS expression
+    (31) expression -> expression . TIMES expression
+    (32) expression -> expression . DIVIDE expression
+    (33) expression -> expression . EQ expression
+    (34) expression -> expression . NE expression
+    (35) expression -> expression . LT expression
+    (36) expression -> expression . LE expression
+    (37) expression -> expression . GT expression
+    (38) expression -> expression . GE expression
+    (39) expression -> expression . AND expression
+    (40) expression -> expression . OR expression
+
+    NEWLINE         reduce using rule 29 (expression -> expression PLUS expression .)
+    PLUS            reduce using rule 29 (expression -> expression PLUS expression .)
+    MINUS           reduce using rule 29 (expression -> expression PLUS expression .)
+    EQ              reduce using rule 29 (expression -> expression PLUS expression .)
+    NE              reduce using rule 29 (expression -> expression PLUS expression .)
+    LT              reduce using rule 29 (expression -> expression PLUS expression .)
+    LE              reduce using rule 29 (expression -> expression PLUS expression .)
+    GT              reduce using rule 29 (expression -> expression PLUS expression .)
+    GE              reduce using rule 29 (expression -> expression PLUS expression .)
+    AND             reduce using rule 29 (expression -> expression PLUS expression .)
+    OR              reduce using rule 29 (expression -> expression PLUS expression .)
+    RPAREN          reduce using rule 29 (expression -> expression PLUS expression .)
+    COMMA           reduce using rule 29 (expression -> expression PLUS expression .)
+    TIMES           shift and go to state 61
+    DIVIDE          shift and go to state 62
+
+  ! TIMES           [ reduce using rule 29 (expression -> expression PLUS expression .) ]
+  ! DIVIDE          [ reduce using rule 29 (expression -> expression PLUS expression .) ]
+  ! PLUS            [ shift and go to state 59 ]
+  ! MINUS           [ shift and go to state 60 ]
+  ! EQ              [ shift and go to state 63 ]
+  ! NE              [ shift and go to state 64 ]
+  ! LT              [ shift and go to state 65 ]
+  ! LE              [ shift and go to state 66 ]
+  ! GT              [ shift and go to state 67 ]
+  ! GE              [ shift and go to state 68 ]
+  ! AND             [ shift and go to state 69 ]
+  ! OR              [ shift and go to state 70 ]
+
+
+state 79
+
+    (30) expression -> expression MINUS expression .
+    (29) expression -> expression . PLUS expression
+    (30) expression -> expression . MINUS expression
+    (31) expression -> expression . TIMES expression
+    (32) expression -> expression . DIVIDE expression
+    (33) expression -> expression . EQ expression
+    (34) expression -> expression . NE expression
+    (35) expression -> expression . LT expression
+    (36) expression -> expression . LE expression
+    (37) expression -> expression . GT expression
+    (38) expression -> expression . GE expression
+    (39) expression -> expression . AND expression
+    (40) expression -> expression . OR expression
+
+    NEWLINE         reduce using rule 30 (expression -> expression MINUS expression .)
+    PLUS            reduce using rule 30 (expression -> expression MINUS expression .)
+    MINUS           reduce using rule 30 (expression -> expression MINUS expression .)
+    EQ              reduce using rule 30 (expression -> expression MINUS expression .)
+    NE              reduce using rule 30 (expression -> expression MINUS expression .)
+    LT              reduce using rule 30 (expression -> expression MINUS expression .)
+    LE              reduce using rule 30 (expression -> expression MINUS expression .)
+    GT              reduce using rule 30 (expression -> expression MINUS expression .)
+    GE              reduce using rule 30 (expression -> expression MINUS expression .)
+    AND             reduce using rule 30 (expression -> expression MINUS expression .)
+    OR              reduce using rule 30 (expression -> expression MINUS expression .)
+    RPAREN          reduce using rule 30 (expression -> expression MINUS expression .)
+    COMMA           reduce using rule 30 (expression -> expression MINUS expression .)
+    TIMES           shift and go to state 61
+    DIVIDE          shift and go to state 62
+
+  ! TIMES           [ reduce using rule 30 (expression -> expression MINUS expression .) ]
+  ! DIVIDE          [ reduce using rule 30 (expression -> expression MINUS expression .) ]
+  ! PLUS            [ shift and go to state 59 ]
+  ! MINUS           [ shift and go to state 60 ]
+  ! EQ              [ shift and go to state 63 ]
+  ! NE              [ shift and go to state 64 ]
+  ! LT              [ shift and go to state 65 ]
+  ! LE              [ shift and go to state 66 ]
+  ! GT              [ shift and go to state 67 ]
+  ! GE              [ shift and go to state 68 ]
+  ! AND             [ shift and go to state 69 ]
+  ! OR              [ shift and go to state 70 ]
+
+
+state 80
+
+    (31) expression -> expression TIMES expression .
+    (29) expression -> expression . PLUS expression
+    (30) expression -> expression . MINUS expression
+    (31) expression -> expression . TIMES expression
+    (32) expression -> expression . DIVIDE expression
+    (33) expression -> expression . EQ expression
+    (34) expression -> expression . NE expression
+    (35) expression -> expression . LT expression
+    (36) expression -> expression . LE expression
+    (37) expression -> expression . GT expression
+    (38) expression -> expression . GE expression
+    (39) expression -> expression . AND expression
+    (40) expression -> expression . OR expression
+
+    NEWLINE         reduce using rule 31 (expression -> expression TIMES expression .)
+    PLUS            reduce using rule 31 (expression -> expression TIMES expression .)
+    MINUS           reduce using rule 31 (expression -> expression TIMES expression .)
+    TIMES           reduce using rule 31 (expression -> expression TIMES expression .)
+    DIVIDE          reduce using rule 31 (expression -> expression TIMES expression .)
+    EQ              reduce using rule 31 (expression -> expression TIMES expression .)
+    NE              reduce using rule 31 (expression -> expression TIMES expression .)
+    LT              reduce using rule 31 (expression -> expression TIMES expression .)
+    LE              reduce using rule 31 (expression -> expression TIMES expression .)
+    GT              reduce using rule 31 (expression -> expression TIMES expression .)
+    GE              reduce using rule 31 (expression -> expression TIMES expression .)
+    AND             reduce using rule 31 (expression -> expression TIMES expression .)
+    OR              reduce using rule 31 (expression -> expression TIMES expression .)
+    RPAREN          reduce using rule 31 (expression -> expression TIMES expression .)
+    COMMA           reduce using rule 31 (expression -> expression TIMES expression .)
+
+  ! PLUS            [ shift and go to state 59 ]
+  ! MINUS           [ shift and go to state 60 ]
+  ! TIMES           [ shift and go to state 61 ]
+  ! DIVIDE          [ shift and go to state 62 ]
+  ! EQ              [ shift and go to state 63 ]
+  ! NE              [ shift and go to state 64 ]
+  ! LT              [ shift and go to state 65 ]
+  ! LE              [ shift and go to state 66 ]
+  ! GT              [ shift and go to state 67 ]
+  ! GE              [ shift and go to state 68 ]
+  ! AND             [ shift and go to state 69 ]
+  ! OR              [ shift and go to state 70 ]
+
+
+state 81
+
+    (32) expression -> expression DIVIDE expression .
+    (29) expression -> expression . PLUS expression
+    (30) expression -> expression . MINUS expression
+    (31) expression -> expression . TIMES expression
+    (32) expression -> expression . DIVIDE expression
+    (33) expression -> expression . EQ expression
+    (34) expression -> expression . NE expression
+    (35) expression -> expression . LT expression
+    (36) expression -> expression . LE expression
+    (37) expression -> expression . GT expression
+    (38) expression -> expression . GE expression
+    (39) expression -> expression . AND expression
+    (40) expression -> expression . OR expression
+
+    NEWLINE         reduce using rule 32 (expression -> expression DIVIDE expression .)
+    PLUS            reduce using rule 32 (expression -> expression DIVIDE expression .)
+    MINUS           reduce using rule 32 (expression -> expression DIVIDE expression .)
+    TIMES           reduce using rule 32 (expression -> expression DIVIDE expression .)
+    DIVIDE          reduce using rule 32 (expression -> expression DIVIDE expression .)
+    EQ              reduce using rule 32 (expression -> expression DIVIDE expression .)
+    NE              reduce using rule 32 (expression -> expression DIVIDE expression .)
+    LT              reduce using rule 32 (expression -> expression DIVIDE expression .)
+    LE              reduce using rule 32 (expression -> expression DIVIDE expression .)
+    GT              reduce using rule 32 (expression -> expression DIVIDE expression .)
+    GE              reduce using rule 32 (expression -> expression DIVIDE expression .)
+    AND             reduce using rule 32 (expression -> expression DIVIDE expression .)
+    OR              reduce using rule 32 (expression -> expression DIVIDE expression .)
+    RPAREN          reduce using rule 32 (expression -> expression DIVIDE expression .)
+    COMMA           reduce using rule 32 (expression -> expression DIVIDE expression .)
+
+  ! PLUS            [ shift and go to state 59 ]
+  ! MINUS           [ shift and go to state 60 ]
+  ! TIMES           [ shift and go to state 61 ]
+  ! DIVIDE          [ shift and go to state 62 ]
+  ! EQ              [ shift and go to state 63 ]
+  ! NE              [ shift and go to state 64 ]
+  ! LT              [ shift and go to state 65 ]
+  ! LE              [ shift and go to state 66 ]
+  ! GT              [ shift and go to state 67 ]
+  ! GE              [ shift and go to state 68 ]
+  ! AND             [ shift and go to state 69 ]
+  ! OR              [ shift and go to state 70 ]
+
+
+state 82
+
+    (33) expression -> expression EQ expression .
+    (29) expression -> expression . PLUS expression
+    (30) expression -> expression . MINUS expression
+    (31) expression -> expression . TIMES expression
+    (32) expression -> expression . DIVIDE expression
+    (33) expression -> expression . EQ expression
+    (34) expression -> expression . NE expression
+    (35) expression -> expression . LT expression
+    (36) expression -> expression . LE expression
+    (37) expression -> expression . GT expression
+    (38) expression -> expression . GE expression
+    (39) expression -> expression . AND expression
+    (40) expression -> expression . OR expression
+
+    NEWLINE         reduce using rule 33 (expression -> expression EQ expression .)
+    EQ              reduce using rule 33 (expression -> expression EQ expression .)
+    NE              reduce using rule 33 (expression -> expression EQ expression .)
+    LT              reduce using rule 33 (expression -> expression EQ expression .)
+    LE              reduce using rule 33 (expression -> expression EQ expression .)
+    GT              reduce using rule 33 (expression -> expression EQ expression .)
+    GE              reduce using rule 33 (expression -> expression EQ expression .)
+    AND             reduce using rule 33 (expression -> expression EQ expression .)
+    OR              reduce using rule 33 (expression -> expression EQ expression .)
+    RPAREN          reduce using rule 33 (expression -> expression EQ expression .)
+    COMMA           reduce using rule 33 (expression -> expression EQ expression .)
+    PLUS            shift and go to state 59
+    MINUS           shift and go to state 60
+    TIMES           shift and go to state 61
+    DIVIDE          shift and go to state 62
+
+  ! PLUS            [ reduce using rule 33 (expression -> expression EQ expression .) ]
+  ! MINUS           [ reduce using rule 33 (expression -> expression EQ expression .) ]
+  ! TIMES           [ reduce using rule 33 (expression -> expression EQ expression .) ]
+  ! DIVIDE          [ reduce using rule 33 (expression -> expression EQ expression .) ]
+  ! EQ              [ shift and go to state 63 ]
+  ! NE              [ shift and go to state 64 ]
+  ! LT              [ shift and go to state 65 ]
+  ! LE              [ shift and go to state 66 ]
+  ! GT              [ shift and go to state 67 ]
+  ! GE              [ shift and go to state 68 ]
+  ! AND             [ shift and go to state 69 ]
+  ! OR              [ shift and go to state 70 ]
+
+
+state 83
+
+    (34) expression -> expression NE expression .
+    (29) expression -> expression . PLUS expression
+    (30) expression -> expression . MINUS expression
+    (31) expression -> expression . TIMES expression
+    (32) expression -> expression . DIVIDE expression
+    (33) expression -> expression . EQ expression
+    (34) expression -> expression . NE expression
+    (35) expression -> expression . LT expression
+    (36) expression -> expression . LE expression
+    (37) expression -> expression . GT expression
+    (38) expression -> expression . GE expression
+    (39) expression -> expression . AND expression
+    (40) expression -> expression . OR expression
+
+    NEWLINE         reduce using rule 34 (expression -> expression NE expression .)
+    EQ              reduce using rule 34 (expression -> expression NE expression .)
+    NE              reduce using rule 34 (expression -> expression NE expression .)
+    LT              reduce using rule 34 (expression -> expression NE expression .)
+    LE              reduce using rule 34 (expression -> expression NE expression .)
+    GT              reduce using rule 34 (expression -> expression NE expression .)
+    GE              reduce using rule 34 (expression -> expression NE expression .)
+    AND             reduce using rule 34 (expression -> expression NE expression .)
+    OR              reduce using rule 34 (expression -> expression NE expression .)
+    RPAREN          reduce using rule 34 (expression -> expression NE expression .)
+    COMMA           reduce using rule 34 (expression -> expression NE expression .)
+    PLUS            shift and go to state 59
+    MINUS           shift and go to state 60
+    TIMES           shift and go to state 61
+    DIVIDE          shift and go to state 62
+
+  ! PLUS            [ reduce using rule 34 (expression -> expression NE expression .) ]
+  ! MINUS           [ reduce using rule 34 (expression -> expression NE expression .) ]
+  ! TIMES           [ reduce using rule 34 (expression -> expression NE expression .) ]
+  ! DIVIDE          [ reduce using rule 34 (expression -> expression NE expression .) ]
+  ! EQ              [ shift and go to state 63 ]
+  ! NE              [ shift and go to state 64 ]
+  ! LT              [ shift and go to state 65 ]
+  ! LE              [ shift and go to state 66 ]
+  ! GT              [ shift and go to state 67 ]
+  ! GE              [ shift and go to state 68 ]
+  ! AND             [ shift and go to state 69 ]
+  ! OR              [ shift and go to state 70 ]
+
+
+state 84
+
+    (35) expression -> expression LT expression .
+    (29) expression -> expression . PLUS expression
+    (30) expression -> expression . MINUS expression
+    (31) expression -> expression . TIMES expression
+    (32) expression -> expression . DIVIDE expression
+    (33) expression -> expression . EQ expression
+    (34) expression -> expression . NE expression
+    (35) expression -> expression . LT expression
+    (36) expression -> expression . LE expression
+    (37) expression -> expression . GT expression
+    (38) expression -> expression . GE expression
+    (39) expression -> expression . AND expression
+    (40) expression -> expression . OR expression
+
+    NEWLINE         reduce using rule 35 (expression -> expression LT expression .)
+    EQ              reduce using rule 35 (expression -> expression LT expression .)
+    NE              reduce using rule 35 (expression -> expression LT expression .)
+    LT              reduce using rule 35 (expression -> expression LT expression .)
+    LE              reduce using rule 35 (expression -> expression LT expression .)
+    GT              reduce using rule 35 (expression -> expression LT expression .)
+    GE              reduce using rule 35 (expression -> expression LT expression .)
+    AND             reduce using rule 35 (expression -> expression LT expression .)
+    OR              reduce using rule 35 (expression -> expression LT expression .)
+    RPAREN          reduce using rule 35 (expression -> expression LT expression .)
+    COMMA           reduce using rule 35 (expression -> expression LT expression .)
+    PLUS            shift and go to state 59
+    MINUS           shift and go to state 60
+    TIMES           shift and go to state 61
+    DIVIDE          shift and go to state 62
+
+  ! PLUS            [ reduce using rule 35 (expression -> expression LT expression .) ]
+  ! MINUS           [ reduce using rule 35 (expression -> expression LT expression .) ]
+  ! TIMES           [ reduce using rule 35 (expression -> expression LT expression .) ]
+  ! DIVIDE          [ reduce using rule 35 (expression -> expression LT expression .) ]
+  ! EQ              [ shift and go to state 63 ]
+  ! NE              [ shift and go to state 64 ]
+  ! LT              [ shift and go to state 65 ]
+  ! LE              [ shift and go to state 66 ]
+  ! GT              [ shift and go to state 67 ]
+  ! GE              [ shift and go to state 68 ]
+  ! AND             [ shift and go to state 69 ]
+  ! OR              [ shift and go to state 70 ]
+
+
+state 85
+
+    (36) expression -> expression LE expression .
+    (29) expression -> expression . PLUS expression
+    (30) expression -> expression . MINUS expression
+    (31) expression -> expression . TIMES expression
+    (32) expression -> expression . DIVIDE expression
+    (33) expression -> expression . EQ expression
+    (34) expression -> expression . NE expression
+    (35) expression -> expression . LT expression
+    (36) expression -> expression . LE expression
+    (37) expression -> expression . GT expression
+    (38) expression -> expression . GE expression
+    (39) expression -> expression . AND expression
+    (40) expression -> expression . OR expression
+
+    NEWLINE         reduce using rule 36 (expression -> expression LE expression .)
+    EQ              reduce using rule 36 (expression -> expression LE expression .)
+    NE              reduce using rule 36 (expression -> expression LE expression .)
+    LT              reduce using rule 36 (expression -> expression LE expression .)
+    LE              reduce using rule 36 (expression -> expression LE expression .)
+    GT              reduce using rule 36 (expression -> expression LE expression .)
+    GE              reduce using rule 36 (expression -> expression LE expression .)
+    AND             reduce using rule 36 (expression -> expression LE expression .)
+    OR              reduce using rule 36 (expression -> expression LE expression .)
+    RPAREN          reduce using rule 36 (expression -> expression LE expression .)
+    COMMA           reduce using rule 36 (expression -> expression LE expression .)
+    PLUS            shift and go to state 59
+    MINUS           shift and go to state 60
+    TIMES           shift and go to state 61
+    DIVIDE          shift and go to state 62
+
+  ! PLUS            [ reduce using rule 36 (expression -> expression LE expression .) ]
+  ! MINUS           [ reduce using rule 36 (expression -> expression LE expression .) ]
+  ! TIMES           [ reduce using rule 36 (expression -> expression LE expression .) ]
+  ! DIVIDE          [ reduce using rule 36 (expression -> expression LE expression .) ]
+  ! EQ              [ shift and go to state 63 ]
+  ! NE              [ shift and go to state 64 ]
+  ! LT              [ shift and go to state 65 ]
+  ! LE              [ shift and go to state 66 ]
+  ! GT              [ shift and go to state 67 ]
+  ! GE              [ shift and go to state 68 ]
+  ! AND             [ shift and go to state 69 ]
+  ! OR              [ shift and go to state 70 ]
+
+
+state 86
+
+    (37) expression -> expression GT expression .
+    (29) expression -> expression . PLUS expression
+    (30) expression -> expression . MINUS expression
+    (31) expression -> expression . TIMES expression
+    (32) expression -> expression . DIVIDE expression
+    (33) expression -> expression . EQ expression
+    (34) expression -> expression . NE expression
+    (35) expression -> expression . LT expression
+    (36) expression -> expression . LE expression
+    (37) expression -> expression . GT expression
+    (38) expression -> expression . GE expression
+    (39) expression -> expression . AND expression
+    (40) expression -> expression . OR expression
+
+    NEWLINE         reduce using rule 37 (expression -> expression GT expression .)
+    EQ              reduce using rule 37 (expression -> expression GT expression .)
+    NE              reduce using rule 37 (expression -> expression GT expression .)
+    LT              reduce using rule 37 (expression -> expression GT expression .)
+    LE              reduce using rule 37 (expression -> expression GT expression .)
+    GT              reduce using rule 37 (expression -> expression GT expression .)
+    GE              reduce using rule 37 (expression -> expression GT expression .)
+    AND             reduce using rule 37 (expression -> expression GT expression .)
+    OR              reduce using rule 37 (expression -> expression GT expression .)
+    RPAREN          reduce using rule 37 (expression -> expression GT expression .)
+    COMMA           reduce using rule 37 (expression -> expression GT expression .)
+    PLUS            shift and go to state 59
+    MINUS           shift and go to state 60
+    TIMES           shift and go to state 61
+    DIVIDE          shift and go to state 62
+
+  ! PLUS            [ reduce using rule 37 (expression -> expression GT expression .) ]
+  ! MINUS           [ reduce using rule 37 (expression -> expression GT expression .) ]
+  ! TIMES           [ reduce using rule 37 (expression -> expression GT expression .) ]
+  ! DIVIDE          [ reduce using rule 37 (expression -> expression GT expression .) ]
+  ! EQ              [ shift and go to state 63 ]
+  ! NE              [ shift and go to state 64 ]
+  ! LT              [ shift and go to state 65 ]
+  ! LE              [ shift and go to state 66 ]
+  ! GT              [ shift and go to state 67 ]
+  ! GE              [ shift and go to state 68 ]
+  ! AND             [ shift and go to state 69 ]
+  ! OR              [ shift and go to state 70 ]
+
+
+state 87
+
+    (38) expression -> expression GE expression .
+    (29) expression -> expression . PLUS expression
+    (30) expression -> expression . MINUS expression
+    (31) expression -> expression . TIMES expression
+    (32) expression -> expression . DIVIDE expression
+    (33) expression -> expression . EQ expression
+    (34) expression -> expression . NE expression
+    (35) expression -> expression . LT expression
+    (36) expression -> expression . LE expression
+    (37) expression -> expression . GT expression
+    (38) expression -> expression . GE expression
+    (39) expression -> expression . AND expression
+    (40) expression -> expression . OR expression
+
+    NEWLINE         reduce using rule 38 (expression -> expression GE expression .)
+    EQ              reduce using rule 38 (expression -> expression GE expression .)
+    NE              reduce using rule 38 (expression -> expression GE expression .)
+    LT              reduce using rule 38 (expression -> expression GE expression .)
+    LE              reduce using rule 38 (expression -> expression GE expression .)
+    GT              reduce using rule 38 (expression -> expression GE expression .)
+    GE              reduce using rule 38 (expression -> expression GE expression .)
+    AND             reduce using rule 38 (expression -> expression GE expression .)
+    OR              reduce using rule 38 (expression -> expression GE expression .)
+    RPAREN          reduce using rule 38 (expression -> expression GE expression .)
+    COMMA           reduce using rule 38 (expression -> expression GE expression .)
+    PLUS            shift and go to state 59
+    MINUS           shift and go to state 60
+    TIMES           shift and go to state 61
+    DIVIDE          shift and go to state 62
+
+  ! PLUS            [ reduce using rule 38 (expression -> expression GE expression .) ]
+  ! MINUS           [ reduce using rule 38 (expression -> expression GE expression .) ]
+  ! TIMES           [ reduce using rule 38 (expression -> expression GE expression .) ]
+  ! DIVIDE          [ reduce using rule 38 (expression -> expression GE expression .) ]
+  ! EQ              [ shift and go to state 63 ]
+  ! NE              [ shift and go to state 64 ]
+  ! LT              [ shift and go to state 65 ]
+  ! LE              [ shift and go to state 66 ]
+  ! GT              [ shift and go to state 67 ]
+  ! GE              [ shift and go to state 68 ]
+  ! AND             [ shift and go to state 69 ]
+  ! OR              [ shift and go to state 70 ]
+
+
+state 88
+
+    (39) expression -> expression AND expression .
+    (29) expression -> expression . PLUS expression
+    (30) expression -> expression . MINUS expression
+    (31) expression -> expression . TIMES expression
+    (32) expression -> expression . DIVIDE expression
+    (33) expression -> expression . EQ expression
+    (34) expression -> expression . NE expression
+    (35) expression -> expression . LT expression
+    (36) expression -> expression . LE expression
+    (37) expression -> expression . GT expression
+    (38) expression -> expression . GE expression
+    (39) expression -> expression . AND expression
+    (40) expression -> expression . OR expression
+
+    NEWLINE         reduce using rule 39 (expression -> expression AND expression .)
+    AND             reduce using rule 39 (expression -> expression AND expression .)
+    OR              reduce using rule 39 (expression -> expression AND expression .)
+    RPAREN          reduce using rule 39 (expression -> expression AND expression .)
+    COMMA           reduce using rule 39 (expression -> expression AND expression .)
+    PLUS            shift and go to state 59
+    MINUS           shift and go to state 60
+    TIMES           shift and go to state 61
+    DIVIDE          shift and go to state 62
+    EQ              shift and go to state 63
+    NE              shift and go to state 64
+    LT              shift and go to state 65
+    LE              shift and go to state 66
+    GT              shift and go to state 67
+    GE              shift and go to state 68
+
+  ! PLUS            [ reduce using rule 39 (expression -> expression AND expression .) ]
+  ! MINUS           [ reduce using rule 39 (expression -> expression AND expression .) ]
+  ! TIMES           [ reduce using rule 39 (expression -> expression AND expression .) ]
+  ! DIVIDE          [ reduce using rule 39 (expression -> expression AND expression .) ]
+  ! EQ              [ reduce using rule 39 (expression -> expression AND expression .) ]
+  ! NE              [ reduce using rule 39 (expression -> expression AND expression .) ]
+  ! LT              [ reduce using rule 39 (expression -> expression AND expression .) ]
+  ! LE              [ reduce using rule 39 (expression -> expression AND expression .) ]
+  ! GT              [ reduce using rule 39 (expression -> expression AND expression .) ]
+  ! GE              [ reduce using rule 39 (expression -> expression AND expression .) ]
+  ! AND             [ shift and go to state 69 ]
+  ! OR              [ shift and go to state 70 ]
+
+
+state 89
+
+    (40) expression -> expression OR expression .
+    (29) expression -> expression . PLUS expression
+    (30) expression -> expression . MINUS expression
+    (31) expression -> expression . TIMES expression
+    (32) expression -> expression . DIVIDE expression
+    (33) expression -> expression . EQ expression
+    (34) expression -> expression . NE expression
+    (35) expression -> expression . LT expression
+    (36) expression -> expression . LE expression
+    (37) expression -> expression . GT expression
+    (38) expression -> expression . GE expression
+    (39) expression -> expression . AND expression
+    (40) expression -> expression . OR expression
+
+    NEWLINE         reduce using rule 40 (expression -> expression OR expression .)
+    OR              reduce using rule 40 (expression -> expression OR expression .)
+    RPAREN          reduce using rule 40 (expression -> expression OR expression .)
+    COMMA           reduce using rule 40 (expression -> expression OR expression .)
+    PLUS            shift and go to state 59
+    MINUS           shift and go to state 60
+    TIMES           shift and go to state 61
+    DIVIDE          shift and go to state 62
+    EQ              shift and go to state 63
+    NE              shift and go to state 64
+    LT              shift and go to state 65
+    LE              shift and go to state 66
+    GT              shift and go to state 67
+    GE              shift and go to state 68
+    AND             shift and go to state 69
+
+  ! PLUS            [ reduce using rule 40 (expression -> expression OR expression .) ]
+  ! MINUS           [ reduce using rule 40 (expression -> expression OR expression .) ]
+  ! TIMES           [ reduce using rule 40 (expression -> expression OR expression .) ]
+  ! DIVIDE          [ reduce using rule 40 (expression -> expression OR expression .) ]
+  ! EQ              [ reduce using rule 40 (expression -> expression OR expression .) ]
+  ! NE              [ reduce using rule 40 (expression -> expression OR expression .) ]
+  ! LT              [ reduce using rule 40 (expression -> expression OR expression .) ]
+  ! LE              [ reduce using rule 40 (expression -> expression OR expression .) ]
+  ! GT              [ reduce using rule 40 (expression -> expression OR expression .) ]
+  ! GE              [ reduce using rule 40 (expression -> expression OR expression .) ]
+  ! AND             [ reduce using rule 40 (expression -> expression OR expression .) ]
+  ! OR              [ shift and go to state 70 ]
+
+
+state 90
+
+    (48) expression -> LPAREN expression RPAREN .
+
+    NEWLINE         reduce using rule 48 (expression -> LPAREN expression RPAREN .)
+    PLUS            reduce using rule 48 (expression -> LPAREN expression RPAREN .)
+    MINUS           reduce using rule 48 (expression -> LPAREN expression RPAREN .)
+    TIMES           reduce using rule 48 (expression -> LPAREN expression RPAREN .)
+    DIVIDE          reduce using rule 48 (expression -> LPAREN expression RPAREN .)
+    EQ              reduce using rule 48 (expression -> LPAREN expression RPAREN .)
+    NE              reduce using rule 48 (expression -> LPAREN expression RPAREN .)
+    LT              reduce using rule 48 (expression -> LPAREN expression RPAREN .)
+    LE              reduce using rule 48 (expression -> LPAREN expression RPAREN .)
+    GT              reduce using rule 48 (expression -> LPAREN expression RPAREN .)
+    GE              reduce using rule 48 (expression -> LPAREN expression RPAREN .)
+    AND             reduce using rule 48 (expression -> LPAREN expression RPAREN .)
+    OR              reduce using rule 48 (expression -> LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 48 (expression -> LPAREN expression RPAREN .)
+    COMMA           reduce using rule 48 (expression -> LPAREN expression RPAREN .)
+
+
+state 91
+
+    (11) expr_list -> expr_list COMMA . expression
+    (29) expression -> . expression PLUS expression
+    (30) expression -> . expression MINUS expression
+    (31) expression -> . expression TIMES expression
+    (32) expression -> . expression DIVIDE expression
+    (33) expression -> . expression EQ expression
+    (34) expression -> . expression NE expression
+    (35) expression -> . expression LT expression
+    (36) expression -> . expression LE expression
+    (37) expression -> . expression GT expression
+    (38) expression -> . expression GE expression
+    (39) expression -> . expression AND expression
+    (40) expression -> . expression OR expression
+    (41) expression -> . NOT expression
+    (42) expression -> . INT_NUMBER
+    (43) expression -> . REAL_NUMBER
+    (44) expression -> . ID
+    (45) expression -> . STRING
+    (46) expression -> . TRUE
+    (47) expression -> . FALSE
+    (48) expression -> . LPAREN expression RPAREN
+
+    NOT             shift and go to state 44
+    INT_NUMBER      shift and go to state 45
+    REAL_NUMBER     shift and go to state 46
+    ID              shift and go to state 42
+    STRING          shift and go to state 47
+    TRUE            shift and go to state 48
+    FALSE           shift and go to state 49
+    LPAREN          shift and go to state 50
+
+    expression                     shift and go to state 96
+
+state 92
+
+    (22) print_statement -> PRINT TIMES COMMA expr_list NEWLINE .
+
+    END             reduce using rule 22 (print_statement -> PRINT TIMES COMMA expr_list NEWLINE .)
+    ID              reduce using rule 22 (print_statement -> PRINT TIMES COMMA expr_list NEWLINE .)
+    PRINT           reduce using rule 22 (print_statement -> PRINT TIMES COMMA expr_list NEWLINE .)
+    READ            reduce using rule 22 (print_statement -> PRINT TIMES COMMA expr_list NEWLINE .)
+    IF              reduce using rule 22 (print_statement -> PRINT TIMES COMMA expr_list NEWLINE .)
+    DO              reduce using rule 22 (print_statement -> PRINT TIMES COMMA expr_list NEWLINE .)
+    GOTO            reduce using rule 22 (print_statement -> PRINT TIMES COMMA expr_list NEWLINE .)
+    INT_NUMBER      reduce using rule 22 (print_statement -> PRINT TIMES COMMA expr_list NEWLINE .)
+    ENDIF           reduce using rule 22 (print_statement -> PRINT TIMES COMMA expr_list NEWLINE .)
+    ELSE            reduce using rule 22 (print_statement -> PRINT TIMES COMMA expr_list NEWLINE .)
+    CONTINUE        reduce using rule 22 (print_statement -> PRINT TIMES COMMA expr_list NEWLINE .)
+
+
+state 93
+
+    (23) read_statement -> READ TIMES COMMA id_list NEWLINE .
+
+    END             reduce using rule 23 (read_statement -> READ TIMES COMMA id_list NEWLINE .)
+    ID              reduce using rule 23 (read_statement -> READ TIMES COMMA id_list NEWLINE .)
+    PRINT           reduce using rule 23 (read_statement -> READ TIMES COMMA id_list NEWLINE .)
+    READ            reduce using rule 23 (read_statement -> READ TIMES COMMA id_list NEWLINE .)
+    IF              reduce using rule 23 (read_statement -> READ TIMES COMMA id_list NEWLINE .)
+    DO              reduce using rule 23 (read_statement -> READ TIMES COMMA id_list NEWLINE .)
+    GOTO            reduce using rule 23 (read_statement -> READ TIMES COMMA id_list NEWLINE .)
+    INT_NUMBER      reduce using rule 23 (read_statement -> READ TIMES COMMA id_list NEWLINE .)
+    ENDIF           reduce using rule 23 (read_statement -> READ TIMES COMMA id_list NEWLINE .)
+    ELSE            reduce using rule 23 (read_statement -> READ TIMES COMMA id_list NEWLINE .)
+    CONTINUE        reduce using rule 23 (read_statement -> READ TIMES COMMA id_list NEWLINE .)
+
+
+state 94
+
+    (24) if_statement -> IF LPAREN expression RPAREN THEN . NEWLINE statement_list ENDIF NEWLINE
+    (25) if_statement -> IF LPAREN expression RPAREN THEN . NEWLINE statement_list ELSE NEWLINE statement_list ENDIF NEWLINE
+
+    NEWLINE         shift and go to state 97
+
+
+state 95
+
+    (26) do_statement -> DO INT_NUMBER ID ASSIGN expression . COMMA expression NEWLINE statement_list CONTINUE
+    (29) expression -> expression . PLUS expression
+    (30) expression -> expression . MINUS expression
+    (31) expression -> expression . TIMES expression
+    (32) expression -> expression . DIVIDE expression
+    (33) expression -> expression . EQ expression
+    (34) expression -> expression . NE expression
+    (35) expression -> expression . LT expression
+    (36) expression -> expression . LE expression
+    (37) expression -> expression . GT expression
+    (38) expression -> expression . GE expression
+    (39) expression -> expression . AND expression
+    (40) expression -> expression . OR expression
+
+    COMMA           shift and go to state 98
+    PLUS            shift and go to state 59
+    MINUS           shift and go to state 60
+    TIMES           shift and go to state 61
+    DIVIDE          shift and go to state 62
+    EQ              shift and go to state 63
+    NE              shift and go to state 64
+    LT              shift and go to state 65
+    LE              shift and go to state 66
+    GT              shift and go to state 67
+    GE              shift and go to state 68
+    AND             shift and go to state 69
+    OR              shift and go to state 70
+
+
+state 96
+
+    (11) expr_list -> expr_list COMMA expression .
+    (29) expression -> expression . PLUS expression
+    (30) expression -> expression . MINUS expression
+    (31) expression -> expression . TIMES expression
+    (32) expression -> expression . DIVIDE expression
+    (33) expression -> expression . EQ expression
+    (34) expression -> expression . NE expression
+    (35) expression -> expression . LT expression
+    (36) expression -> expression . LE expression
+    (37) expression -> expression . GT expression
+    (38) expression -> expression . GE expression
+    (39) expression -> expression . AND expression
+    (40) expression -> expression . OR expression
+
+    NEWLINE         reduce using rule 11 (expr_list -> expr_list COMMA expression .)
+    COMMA           reduce using rule 11 (expr_list -> expr_list COMMA expression .)
+    PLUS            shift and go to state 59
+    MINUS           shift and go to state 60
+    TIMES           shift and go to state 61
+    DIVIDE          shift and go to state 62
+    EQ              shift and go to state 63
+    NE              shift and go to state 64
+    LT              shift and go to state 65
+    LE              shift and go to state 66
+    GT              shift and go to state 67
+    GE              shift and go to state 68
+    AND             shift and go to state 69
+    OR              shift and go to state 70
+
+
+state 97
+
+    (24) if_statement -> IF LPAREN expression RPAREN THEN NEWLINE . statement_list ENDIF NEWLINE
+    (25) if_statement -> IF LPAREN expression RPAREN THEN NEWLINE . statement_list ELSE NEWLINE statement_list ENDIF NEWLINE
+    (12) statement_list -> . empty
+    (13) statement_list -> . statement_list statement
+    (49) empty -> .
+
+    ENDIF           reduce using rule 49 (empty -> .)
+    ELSE            reduce using rule 49 (empty -> .)
+    ID              reduce using rule 49 (empty -> .)
+    PRINT           reduce using rule 49 (empty -> .)
+    READ            reduce using rule 49 (empty -> .)
+    IF              reduce using rule 49 (empty -> .)
+    DO              reduce using rule 49 (empty -> .)
+    GOTO            reduce using rule 49 (empty -> .)
+    INT_NUMBER      reduce using rule 49 (empty -> .)
+
+    statement_list                 shift and go to state 99
+    empty                          shift and go to state 9
+
+state 98
+
+    (26) do_statement -> DO INT_NUMBER ID ASSIGN expression COMMA . expression NEWLINE statement_list CONTINUE
+    (29) expression -> . expression PLUS expression
+    (30) expression -> . expression MINUS expression
+    (31) expression -> . expression TIMES expression
+    (32) expression -> . expression DIVIDE expression
+    (33) expression -> . expression EQ expression
+    (34) expression -> . expression NE expression
+    (35) expression -> . expression LT expression
+    (36) expression -> . expression LE expression
+    (37) expression -> . expression GT expression
+    (38) expression -> . expression GE expression
+    (39) expression -> . expression AND expression
+    (40) expression -> . expression OR expression
+    (41) expression -> . NOT expression
+    (42) expression -> . INT_NUMBER
+    (43) expression -> . REAL_NUMBER
+    (44) expression -> . ID
+    (45) expression -> . STRING
+    (46) expression -> . TRUE
+    (47) expression -> . FALSE
+    (48) expression -> . LPAREN expression RPAREN
+
+    NOT             shift and go to state 44
+    INT_NUMBER      shift and go to state 45
+    REAL_NUMBER     shift and go to state 46
+    ID              shift and go to state 42
+    STRING          shift and go to state 47
+    TRUE            shift and go to state 48
+    FALSE           shift and go to state 49
+    LPAREN          shift and go to state 50
+
+    expression                     shift and go to state 100
+
+state 99
+
+    (24) if_statement -> IF LPAREN expression RPAREN THEN NEWLINE statement_list . ENDIF NEWLINE
+    (25) if_statement -> IF LPAREN expression RPAREN THEN NEWLINE statement_list . ELSE NEWLINE statement_list ENDIF NEWLINE
+    (13) statement_list -> statement_list . statement
+    (14) statement -> . assignment
+    (15) statement -> . print_statement
+    (16) statement -> . read_statement
+    (17) statement -> . if_statement
+    (18) statement -> . do_statement
+    (19) statement -> . goto_statement
+    (20) statement -> . continue_statement
+    (21) assignment -> . ID ASSIGN expression NEWLINE
+    (22) print_statement -> . PRINT TIMES COMMA expr_list NEWLINE
+    (23) read_statement -> . READ TIMES COMMA id_list NEWLINE
+    (24) if_statement -> . IF LPAREN expression RPAREN THEN NEWLINE statement_list ENDIF NEWLINE
+    (25) if_statement -> . IF LPAREN expression RPAREN THEN NEWLINE statement_list ELSE NEWLINE statement_list ENDIF NEWLINE
+    (26) do_statement -> . DO INT_NUMBER ID ASSIGN expression COMMA expression NEWLINE statement_list CONTINUE
+    (27) goto_statement -> . GOTO INT_NUMBER NEWLINE
+    (28) continue_statement -> . INT_NUMBER CONTINUE NEWLINE
+
+    ENDIF           shift and go to state 101
+    ELSE            shift and go to state 102
+    ID              shift and go to state 14
+    PRINT           shift and go to state 24
+    READ            shift and go to state 25
+    IF              shift and go to state 26
+    DO              shift and go to state 27
+    GOTO            shift and go to state 29
+    INT_NUMBER      shift and go to state 28
+
+    statement                      shift and go to state 16
+    assignment                     shift and go to state 17
+    print_statement                shift and go to state 18
+    read_statement                 shift and go to state 19
+    if_statement                   shift and go to state 20
+    do_statement                   shift and go to state 21
+    goto_statement                 shift and go to state 22
+    continue_statement             shift and go to state 23
+
+state 100
+
+    (26) do_statement -> DO INT_NUMBER ID ASSIGN expression COMMA expression . NEWLINE statement_list CONTINUE
+    (29) expression -> expression . PLUS expression
+    (30) expression -> expression . MINUS expression
+    (31) expression -> expression . TIMES expression
+    (32) expression -> expression . DIVIDE expression
+    (33) expression -> expression . EQ expression
+    (34) expression -> expression . NE expression
+    (35) expression -> expression . LT expression
+    (36) expression -> expression . LE expression
+    (37) expression -> expression . GT expression
+    (38) expression -> expression . GE expression
+    (39) expression -> expression . AND expression
+    (40) expression -> expression . OR expression
+
+    NEWLINE         shift and go to state 103
+    PLUS            shift and go to state 59
+    MINUS           shift and go to state 60
+    TIMES           shift and go to state 61
+    DIVIDE          shift and go to state 62
+    EQ              shift and go to state 63
+    NE              shift and go to state 64
+    LT              shift and go to state 65
+    LE              shift and go to state 66
+    GT              shift and go to state 67
+    GE              shift and go to state 68
+    AND             shift and go to state 69
+    OR              shift and go to state 70
+
+
+state 101
+
+    (24) if_statement -> IF LPAREN expression RPAREN THEN NEWLINE statement_list ENDIF . NEWLINE
+
+    NEWLINE         shift and go to state 104
+
+
+state 102
+
+    (25) if_statement -> IF LPAREN expression RPAREN THEN NEWLINE statement_list ELSE . NEWLINE statement_list ENDIF NEWLINE
+
+    NEWLINE         shift and go to state 105
+
+
+state 103
+
+    (26) do_statement -> DO INT_NUMBER ID ASSIGN expression COMMA expression NEWLINE . statement_list CONTINUE
+    (12) statement_list -> . empty
+    (13) statement_list -> . statement_list statement
+    (49) empty -> .
+
+    CONTINUE        reduce using rule 49 (empty -> .)
+    ID              reduce using rule 49 (empty -> .)
+    PRINT           reduce using rule 49 (empty -> .)
+    READ            reduce using rule 49 (empty -> .)
+    IF              reduce using rule 49 (empty -> .)
+    DO              reduce using rule 49 (empty -> .)
+    GOTO            reduce using rule 49 (empty -> .)
+    INT_NUMBER      reduce using rule 49 (empty -> .)
+
+    statement_list                 shift and go to state 106
+    empty                          shift and go to state 9
+
+state 104
+
+    (24) if_statement -> IF LPAREN expression RPAREN THEN NEWLINE statement_list ENDIF NEWLINE .
+
+    END             reduce using rule 24 (if_statement -> IF LPAREN expression RPAREN THEN NEWLINE statement_list ENDIF NEWLINE .)
+    ID              reduce using rule 24 (if_statement -> IF LPAREN expression RPAREN THEN NEWLINE statement_list ENDIF NEWLINE .)
+    PRINT           reduce using rule 24 (if_statement -> IF LPAREN expression RPAREN THEN NEWLINE statement_list ENDIF NEWLINE .)
+    READ            reduce using rule 24 (if_statement -> IF LPAREN expression RPAREN THEN NEWLINE statement_list ENDIF NEWLINE .)
+    IF              reduce using rule 24 (if_statement -> IF LPAREN expression RPAREN THEN NEWLINE statement_list ENDIF NEWLINE .)
+    DO              reduce using rule 24 (if_statement -> IF LPAREN expression RPAREN THEN NEWLINE statement_list ENDIF NEWLINE .)
+    GOTO            reduce using rule 24 (if_statement -> IF LPAREN expression RPAREN THEN NEWLINE statement_list ENDIF NEWLINE .)
+    INT_NUMBER      reduce using rule 24 (if_statement -> IF LPAREN expression RPAREN THEN NEWLINE statement_list ENDIF NEWLINE .)
+    ENDIF           reduce using rule 24 (if_statement -> IF LPAREN expression RPAREN THEN NEWLINE statement_list ENDIF NEWLINE .)
+    ELSE            reduce using rule 24 (if_statement -> IF LPAREN expression RPAREN THEN NEWLINE statement_list ENDIF NEWLINE .)
+    CONTINUE        reduce using rule 24 (if_statement -> IF LPAREN expression RPAREN THEN NEWLINE statement_list ENDIF NEWLINE .)
+
+
+state 105
+
+    (25) if_statement -> IF LPAREN expression RPAREN THEN NEWLINE statement_list ELSE NEWLINE . statement_list ENDIF NEWLINE
+    (12) statement_list -> . empty
+    (13) statement_list -> . statement_list statement
+    (49) empty -> .
+
+    ENDIF           reduce using rule 49 (empty -> .)
+    ID              reduce using rule 49 (empty -> .)
+    PRINT           reduce using rule 49 (empty -> .)
+    READ            reduce using rule 49 (empty -> .)
+    IF              reduce using rule 49 (empty -> .)
+    DO              reduce using rule 49 (empty -> .)
+    GOTO            reduce using rule 49 (empty -> .)
+    INT_NUMBER      reduce using rule 49 (empty -> .)
+
+    statement_list                 shift and go to state 107
+    empty                          shift and go to state 9
+
+state 106
+
+    (26) do_statement -> DO INT_NUMBER ID ASSIGN expression COMMA expression NEWLINE statement_list . CONTINUE
+    (13) statement_list -> statement_list . statement
+    (14) statement -> . assignment
+    (15) statement -> . print_statement
+    (16) statement -> . read_statement
+    (17) statement -> . if_statement
+    (18) statement -> . do_statement
+    (19) statement -> . goto_statement
+    (20) statement -> . continue_statement
+    (21) assignment -> . ID ASSIGN expression NEWLINE
+    (22) print_statement -> . PRINT TIMES COMMA expr_list NEWLINE
+    (23) read_statement -> . READ TIMES COMMA id_list NEWLINE
+    (24) if_statement -> . IF LPAREN expression RPAREN THEN NEWLINE statement_list ENDIF NEWLINE
+    (25) if_statement -> . IF LPAREN expression RPAREN THEN NEWLINE statement_list ELSE NEWLINE statement_list ENDIF NEWLINE
+    (26) do_statement -> . DO INT_NUMBER ID ASSIGN expression COMMA expression NEWLINE statement_list CONTINUE
+    (27) goto_statement -> . GOTO INT_NUMBER NEWLINE
+    (28) continue_statement -> . INT_NUMBER CONTINUE NEWLINE
+
+    CONTINUE        shift and go to state 108
+    ID              shift and go to state 14
+    PRINT           shift and go to state 24
+    READ            shift and go to state 25
+    IF              shift and go to state 26
+    DO              shift and go to state 27
+    GOTO            shift and go to state 29
+    INT_NUMBER      shift and go to state 28
+
+    statement                      shift and go to state 16
+    assignment                     shift and go to state 17
+    print_statement                shift and go to state 18
+    read_statement                 shift and go to state 19
+    if_statement                   shift and go to state 20
+    do_statement                   shift and go to state 21
+    goto_statement                 shift and go to state 22
+    continue_statement             shift and go to state 23
+
+state 107
+
+    (25) if_statement -> IF LPAREN expression RPAREN THEN NEWLINE statement_list ELSE NEWLINE statement_list . ENDIF NEWLINE
+    (13) statement_list -> statement_list . statement
+    (14) statement -> . assignment
+    (15) statement -> . print_statement
+    (16) statement -> . read_statement
+    (17) statement -> . if_statement
+    (18) statement -> . do_statement
+    (19) statement -> . goto_statement
+    (20) statement -> . continue_statement
+    (21) assignment -> . ID ASSIGN expression NEWLINE
+    (22) print_statement -> . PRINT TIMES COMMA expr_list NEWLINE
+    (23) read_statement -> . READ TIMES COMMA id_list NEWLINE
+    (24) if_statement -> . IF LPAREN expression RPAREN THEN NEWLINE statement_list ENDIF NEWLINE
+    (25) if_statement -> . IF LPAREN expression RPAREN THEN NEWLINE statement_list ELSE NEWLINE statement_list ENDIF NEWLINE
+    (26) do_statement -> . DO INT_NUMBER ID ASSIGN expression COMMA expression NEWLINE statement_list CONTINUE
+    (27) goto_statement -> . GOTO INT_NUMBER NEWLINE
+    (28) continue_statement -> . INT_NUMBER CONTINUE NEWLINE
+
+    ENDIF           shift and go to state 109
+    ID              shift and go to state 14
+    PRINT           shift and go to state 24
+    READ            shift and go to state 25
+    IF              shift and go to state 26
+    DO              shift and go to state 27
+    GOTO            shift and go to state 29
+    INT_NUMBER      shift and go to state 28
+
+    statement                      shift and go to state 16
+    assignment                     shift and go to state 17
+    print_statement                shift and go to state 18
+    read_statement                 shift and go to state 19
+    if_statement                   shift and go to state 20
+    do_statement                   shift and go to state 21
+    goto_statement                 shift and go to state 22
+    continue_statement             shift and go to state 23
+
+state 108
+
+    (26) do_statement -> DO INT_NUMBER ID ASSIGN expression COMMA expression NEWLINE statement_list CONTINUE .
+
+    END             reduce using rule 26 (do_statement -> DO INT_NUMBER ID ASSIGN expression COMMA expression NEWLINE statement_list CONTINUE .)
+    ID              reduce using rule 26 (do_statement -> DO INT_NUMBER ID ASSIGN expression COMMA expression NEWLINE statement_list CONTINUE .)
+    PRINT           reduce using rule 26 (do_statement -> DO INT_NUMBER ID ASSIGN expression COMMA expression NEWLINE statement_list CONTINUE .)
+    READ            reduce using rule 26 (do_statement -> DO INT_NUMBER ID ASSIGN expression COMMA expression NEWLINE statement_list CONTINUE .)
+    IF              reduce using rule 26 (do_statement -> DO INT_NUMBER ID ASSIGN expression COMMA expression NEWLINE statement_list CONTINUE .)
+    DO              reduce using rule 26 (do_statement -> DO INT_NUMBER ID ASSIGN expression COMMA expression NEWLINE statement_list CONTINUE .)
+    GOTO            reduce using rule 26 (do_statement -> DO INT_NUMBER ID ASSIGN expression COMMA expression NEWLINE statement_list CONTINUE .)
+    INT_NUMBER      reduce using rule 26 (do_statement -> DO INT_NUMBER ID ASSIGN expression COMMA expression NEWLINE statement_list CONTINUE .)
+    ENDIF           reduce using rule 26 (do_statement -> DO INT_NUMBER ID ASSIGN expression COMMA expression NEWLINE statement_list CONTINUE .)
+    ELSE            reduce using rule 26 (do_statement -> DO INT_NUMBER ID ASSIGN expression COMMA expression NEWLINE statement_list CONTINUE .)
+    CONTINUE        reduce using rule 26 (do_statement -> DO INT_NUMBER ID ASSIGN expression COMMA expression NEWLINE statement_list CONTINUE .)
+
+
+state 109
+
+    (25) if_statement -> IF LPAREN expression RPAREN THEN NEWLINE statement_list ELSE NEWLINE statement_list ENDIF . NEWLINE
+
+    NEWLINE         shift and go to state 110
+
+
+state 110
+
+    (25) if_statement -> IF LPAREN expression RPAREN THEN NEWLINE statement_list ELSE NEWLINE statement_list ENDIF NEWLINE .
+
+    END             reduce using rule 25 (if_statement -> IF LPAREN expression RPAREN THEN NEWLINE statement_list ELSE NEWLINE statement_list ENDIF NEWLINE .)
+    ID              reduce using rule 25 (if_statement -> IF LPAREN expression RPAREN THEN NEWLINE statement_list ELSE NEWLINE statement_list ENDIF NEWLINE .)
+    PRINT           reduce using rule 25 (if_statement -> IF LPAREN expression RPAREN THEN NEWLINE statement_list ELSE NEWLINE statement_list ENDIF NEWLINE .)
+    READ            reduce using rule 25 (if_statement -> IF LPAREN expression RPAREN THEN NEWLINE statement_list ELSE NEWLINE statement_list ENDIF NEWLINE .)
+    IF              reduce using rule 25 (if_statement -> IF LPAREN expression RPAREN THEN NEWLINE statement_list ELSE NEWLINE statement_list ENDIF NEWLINE .)
+    DO              reduce using rule 25 (if_statement -> IF LPAREN expression RPAREN THEN NEWLINE statement_list ELSE NEWLINE statement_list ENDIF NEWLINE .)
+    GOTO            reduce using rule 25 (if_statement -> IF LPAREN expression RPAREN THEN NEWLINE statement_list ELSE NEWLINE statement_list ENDIF NEWLINE .)
+    INT_NUMBER      reduce using rule 25 (if_statement -> IF LPAREN expression RPAREN THEN NEWLINE statement_list ELSE NEWLINE statement_list ENDIF NEWLINE .)
+    ENDIF           reduce using rule 25 (if_statement -> IF LPAREN expression RPAREN THEN NEWLINE statement_list ELSE NEWLINE statement_list ENDIF NEWLINE .)
+    ELSE            reduce using rule 25 (if_statement -> IF LPAREN expression RPAREN THEN NEWLINE statement_list ELSE NEWLINE statement_list ENDIF NEWLINE .)
+    CONTINUE        reduce using rule 25 (if_statement -> IF LPAREN expression RPAREN THEN NEWLINE statement_list ELSE NEWLINE statement_list ENDIF NEWLINE .)
+
