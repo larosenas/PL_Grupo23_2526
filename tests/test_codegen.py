@@ -230,16 +230,16 @@ def test_codegen_if_else():
         "PUSHG 0\n"
         "PUSHI 0\n"
         "SUP\n"
-        "JZ ELSE_1\n"
+        "JZ ELSE1\n"
         "PUSHG 0\n"
         "WRITEI\n"
         "WRITELN\n"
-        "JUMP ENDIF_2\n"
-        "ELSE_1:\n"
+        "JUMP ENDIF2\n"
+        "ELSE1:\n"
         "PUSHI 0\n"
         "WRITEI\n"
         "WRITELN\n"
-        "ENDIF_2:\n"
+        "ENDIF2:\n"
         "STOP\n"
     )
 
@@ -257,7 +257,7 @@ def test_codegen_goto_and_continue():
 
     code = CodeGenerator().generate(program)
 
-    assert code == ("JUMP F_20\n" "F_20:\n" "STOP\n")
+    assert code == ("JUMP F20\n" "F20:\n" "STOP\n")
 
 
 def test_codegen_do_loop():
@@ -291,22 +291,22 @@ def test_codegen_do_loop():
         "STOREG 1\n"
         "PUSHI 1\n"
         "STOREG 0\n"
-        "DO_START_1:\n"
+        "DOSTART1:\n"
         "PUSHG 0\n"
         "PUSHI 5\n"
         "INFEQ\n"
-        "JZ DO_END_2\n"
+        "JZ DOEND2\n"
         "PUSHG 1\n"
         "PUSHG 0\n"
         "MUL\n"
         "STOREG 1\n"
-        "F_10:\n"
+        "F10:\n"
         "PUSHG 0\n"
         "PUSHI 1\n"
         "ADD\n"
         "STOREG 0\n"
-        "JUMP DO_START_1\n"
-        "DO_END_2:\n"
+        "JUMP DOSTART1\n"
+        "DOEND2:\n"
         "STOP\n"
     )
 
@@ -361,7 +361,7 @@ def test_codegen_array_read_and_access():
         "PUSHG 5\n"
         "PUSHI 1\n"
         "SUB\n"
-        "CHECK 0 4\n"
+        "CHECK 0, 4\n"
         "PADD\n"
         "READ\n"
         "ATOI\n"
@@ -371,7 +371,7 @@ def test_codegen_array_read_and_access():
         "PUSHG 5\n"
         "PUSHI 1\n"
         "SUB\n"
-        "CHECK 0 4\n"
+        "CHECK 0, 4\n"
         "PADD\n"
         "LOAD 0\n"
         "ADD\n"

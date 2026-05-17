@@ -27,10 +27,10 @@ def compile_file(input_path, output_path=None):
     ast = parse(source_code)
 
     analyzer = SemanticAnalyzer()
-    analyzer.analyze(ast)
+    analyzer.analyze(ast.program)
 
     generator = CodeGenerator()
-    vm_code = generator.generate(ast)
+    vm_code = generator.generate(ast.program)
 
     if output_path is None:
         output_dir = ROOT_DIR / "output"

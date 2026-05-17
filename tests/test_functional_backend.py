@@ -99,22 +99,22 @@ def test_backend_factorial_program():
             "STOREG 2",
             "PUSHI 1",
             "STOREG 1",
-            "DO_START_1:",
+            "DOSTART1:",
             "PUSHG 1",
             "PUSHG 0",
             "INFEQ",
-            "JZ DO_END_2",
+            "JZ DOEND2",
             "PUSHG 2",
             "PUSHG 1",
             "MUL",
             "STOREG 2",
-            "F_10:",
+            "F10:",
             "PUSHG 1",
             "PUSHI 1",
             "ADD",
             "STOREG 1",
-            "JUMP DO_START_1",
-            "DO_END_2:",
+            "JUMP DOSTART1",
+            "DOEND2:",
             'PUSHS "Factorial of "',
             "WRITES",
             "PUSHG 0",
@@ -183,16 +183,16 @@ def test_backend_sum_array_program():
         "WRITELN\n"
         "PUSHI 1\n"
         "STOREG 5\n"
-        "DO_START_1:\n"
+        "DOSTART1:\n"
         "PUSHG 5\n"
         "PUSHI 5\n"
         "INFEQ\n"
-        "JZ DO_END_2\n"
+        "JZ DOEND2\n"
         "PUSHGP\n"
         "PUSHG 5\n"
         "PUSHI 1\n"
         "SUB\n"
-        "CHECK 0 4\n"
+        "CHECK 0, 4\n"
         "PADD\n"
         "READ\n"
         "ATOI\n"
@@ -202,18 +202,18 @@ def test_backend_sum_array_program():
         "PUSHG 5\n"
         "PUSHI 1\n"
         "SUB\n"
-        "CHECK 0 4\n"
+        "CHECK 0, 4\n"
         "PADD\n"
         "LOAD 0\n"
         "ADD\n"
         "STOREG 6\n"
-        "F_30:\n"
+        "F30:\n"
         "PUSHG 5\n"
         "PUSHI 1\n"
         "ADD\n"
         "STOREG 5\n"
-        "JUMP DO_START_1\n"
-        "DO_END_2:\n"
+        "JUMP DOSTART1\n"
+        "DOEND2:\n"
         'PUSHS "A soma dos numeros e: "\n'
         "WRITES\n"
         "PUSHG 6\n"
@@ -300,7 +300,7 @@ def test_backend_prime_program():
             "STOREG 2",
             "PUSHI 2",
             "STOREG 1",
-            "F_20:",
+            "F20:",
             "PUSHG 1",
             "PUSHG 0",
             "PUSHI 2",
@@ -308,27 +308,27 @@ def test_backend_prime_program():
             "INFEQ",
             "PUSHG 2",
             "AND",
-            "JZ ELSE_1",
+            "JZ ELSE1",
             "PUSHG 0",
             "PUSHG 1",
             "MOD",
             "PUSHI 0",
             "EQUAL",
-            "JZ ELSE_3",
+            "JZ ELSE3",
             "PUSHI 0",
             "STOREG 2",
             "PUSHG 1",
             "PUSHI 1",
             "ADD",
             "STOREG 1",
-            "JUMP F_20",
+            "JUMP F20",
             "PUSHG 2",
-            "JZ ELSE_5",
+            "JZ ELSE5",
             "PUSHG 0",
             "WRITEI",
             'PUSHS " e um numero primo"',
             "WRITES",
-            "JUMP ENDIF_6",
+            "JUMP ENDIF6",
             "PUSHG 0",
             "WRITEI",
             'PUSHS " nao e um numero primo"',

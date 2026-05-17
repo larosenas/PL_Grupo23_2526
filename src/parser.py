@@ -15,6 +15,22 @@ precedence = (
 
 # program structure
 
+def p_file(p):
+    """file : program subprogram_list"""
+    p[0] = File(program=p[1], subprograms=p[2])
+
+def p_subprogram_list_empty(p):
+    """subprogram_list : empty"""
+    p[0] = []
+
+def p_subprogram_list_multiple(p):
+    """subprogram_list : subprogram_list subprogram"""
+    p[0] = p[1] + [p[2]]
+
+def p_subprogram(p):
+    """subprogram : function_def
+    | subroutine_def"""
+    p[0] = p[1]
 
 def p_program(p):
     """program : PROGRAM ID NEWLINE declarations statement_list END newlines_opt"""
@@ -43,16 +59,17 @@ def p_type(p):
     p[0] = p[1]
 
 
+
 # Lists
 
 
 def p_id_list_single(p):
-    """id_list : ID"""
+    """id_list : id_item"""
     p[0] = [p[1]]
 
 
 def p_id_list_multiple(p):
-    """id_list : id_list COMMA ID"""
+    """id_list : id_list COMMA id_item"""
     p[0] = p[1] + [p[3]]
 
 
@@ -65,13 +82,17 @@ def p_expr_list_multiple(p):
     """expr_list : expr_list COMMA expression"""
     p[0] = p[1] + [p[3]]
 
-def p_decl_list_single(p):
-    """decl_list : declaration"""
-    p[0] = [p[1]]
 
-def p_decl_list_multiple(p):
-    """decl_list : decl_list COMMA declaration"""
-    p[0] = p[1] + [p[3]]
+def p_id_item_variable(p):
+    """id_item : ID"""
+    p[0] = p[1]
+
+
+def p_id_item_array(p):
+    """id_item : ID LPAREN INT_NUMBER RPAREN"""
+    p[0] = f"{p[1]}({p[3]})"
+
+
 
 
 # Statements
@@ -84,7 +105,10 @@ def p_statement_list_empty(p):
 
 def p_statement_list_multiple(p):
     """statement_list : statement_list statement"""
-    p[0] = p[1] + [p[2]]
+    if isinstance(p[2], list):
+        p[0] = p[1] + p[2]
+    else:
+        p[0] = p[1] + [p[2]]
 
 
 def p_statement(p):
@@ -96,6 +120,8 @@ def p_statement(p):
               | do_statement
               | goto_statement
               | continue_statement
+              | return_statement
+              | labelled_if_statement
     """
     p[0] = p[1]
 
@@ -121,9 +147,24 @@ def p_if_statement(p):
     """
     p[0] = If(condition=p[3], then_body=p[7], else_body=p[10] if len(p) == 13 else None)
 
+def p_labelled_if_statement(p):
+    """
+    labelled_if_statement : INT_NUMBER IF LPAREN expression RPAREN THEN NEWLINE statement_list ENDIF NEWLINE
+                          | INT_NUMBER IF LPAREN expression RPAREN THEN NEWLINE statement_list ELSE NEWLINE statement_list ENDIF NEWLINE
+    """
+    label = p[1]
+
+    if len(p) == 11:
+        if_node = If(condition=p[4], then_body=p[8], else_body=None)
+        
+    else:
+        if_node = If(condition=p[4],then_body=p[8],else_body=p[11])
+
+    p[0] = [Continue(label=label), if_node]
+
 def p_do_statement(p):
-    """do_statement : INT_NUMBER DO INT_NUMBER ID ASSIGN expression COMMA expression NEWLINE statement_list"""
-    p[0] = Do(label=p[2], variable=p[3], start=p[5], end=p[7], body=p[10])
+    """do_statement : DO INT_NUMBER ID ASSIGN expression COMMA expression NEWLINE statement_list INT_NUMBER CONTINUE NEWLINE"""
+    p[0] = Do(label=p[2], variable=p[3], start=p[5], end=p[7], body=p[9] + [Continue(label=p[2])])
 
 
 def p_goto_statement(p):
@@ -134,6 +175,11 @@ def p_goto_statement(p):
 def p_continue_statement(p):
     """continue_statement : INT_NUMBER CONTINUE NEWLINE"""
     p[0] = Continue(label=p[1])
+
+def p_return_statement(p):
+    """return_statement : RETURN NEWLINE"""
+    p[0] = Return()
+
 
 
 # Expressions with precedence
@@ -227,6 +273,27 @@ def p_newlines_opt(p):
     pass
 
 
+# Rules for subprograms (function and subroutine)
+
+def p_function_def(p):
+    """function_def : type FUNCTION ID LPAREN param_list RPAREN NEWLINE declarations statement_list END NEWLINE"""
+    p[0] = Function(return_type=p[1], name=p[3], params=p[5], declarations=p[8], statements=p[9])
+
+def p_subroutine_def(p):
+    """subroutine_def : SUBROUTINE ID LPAREN param_list RPAREN NEWLINE declarations statement_list END NEWLINE"""
+    p[0] = Subroutine(name=p[2], params=p[4], declarations=p[7], statements=p[8])
+
+def p_param_list_empty(p):
+    """param_list : empty"""
+    p[0] = []
+
+def p_param_list_single(p):
+    """param_list : ID"""
+    p[0] = [p[1]]
+
+def p_param_list_multiple(p):
+    """param_list : param_list COMMA ID"""
+    p[0] = p[1] + [p[3]]
 
 
 # Error handling
@@ -250,4 +317,5 @@ def parse(source_code: str):
 
     #Reset line number for each new parse
     lexer.lineno = 1
-    return parser.parse(source_code, lexer=lexer)
+    return parser.parse(source_code, lexer=lexer, tracking=True)
+

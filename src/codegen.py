@@ -392,7 +392,7 @@ class CodeGenerator:
     def _new_label(self, prefix):
         # Generate a unique label with the given prefix
         self.label_counter += 1
-        return f"{prefix}_{self.label_counter}"
+        return f"{prefix}{self.label_counter}"
 
     def _if(self, statement):
         else_label = self._new_label("ELSE")
@@ -424,22 +424,22 @@ class CodeGenerator:
         return code
 
     def _goto(self, statement):
-        return [f"JUMP F_{statement.label}"]
+        return [f"JUMP F{statement.label}"]
 
     def _continue(self, statement):
         if statement.label is None:
             return []
 
-        return [f"F_{statement.label}:"]
+        return [f"F{statement.label}:"]
 
     def _do(self, statement):
         # Generate code for a DO loop: initialize variable, check bounds, execute body, increment, and repeat.
         variable_name = statement.variable
         variable_index = self._lookup(variable_name)
 
-        start_label = self._new_label("DO_START")
-        end_label = self._new_label("DO_END")
-        continue_label = f"F_{statement.label}"
+        start_label = self._new_label("DOSTART")
+        end_label = self._new_label("DOEND")
+        continue_label = f"F{statement.label}"
 
         code = []
 
@@ -540,7 +540,7 @@ class CodeGenerator:
         code.append("SUB")
 
         # Bounds check: valid internal indexes are 0..size-1.
-        code.append(f"CHECK 0 {size - 1}")
+        code.append(f"CHECK 0, {size - 1}")
 
         code.append("PADD")
 

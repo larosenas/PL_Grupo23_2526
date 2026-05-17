@@ -1,6 +1,6 @@
 ## Intermediate representation
 
-After lexical and sytantic analysis, teh compiler constructs an intermediate representation of the program in the form of an abstract syntax tree(AST).
+After lexical and sytantic analysis, the compiler constructs an intermediate representation of the program in the form of an abstract syntax tree(AST).
 
 This representation allows separating the language recognition phase from the subquent compiler phases, namely semantic analysis and code generation for the virtual machine.
 
@@ -176,7 +176,7 @@ Fortran labels are represented separately using the `F_` prefix. For example:
 becomes:
 
 ```text
-F_20:
+F20:
 ```
 
 and:
@@ -188,7 +188,7 @@ GOTO 20
 becomes:
 
 ```text
-JUMP F_20
+JUMP F20
 ```
 
 `DO` loops are translated as labelled loops. The control variable is initialized with the start expression, the loop condition checks whether the variable is less than or equal to the end expression, and the variable is incremented by one at the end of each iteration.
@@ -206,19 +206,19 @@ is translated into a structure equivalent to:
 ```text
 PUSHI 1
 STOREG <slot_I>
-DO_START_1:
+DOSTART1:
 PUSHG <slot_I>
 PUSHG <slot_N>
 INFEQ
-JZ DO_END_2
+JZ DOEND2
 ...
-F_10:
+F10:
 PUSHG <slot_I>
 PUSHI 1
 ADD
 STOREG <slot_I>
-JUMP DO_START_1
-DO_END_2:
+JUMP DOSTART1
+DOEND2:
 ```
 
 ## Runtime and Execution Pipeline

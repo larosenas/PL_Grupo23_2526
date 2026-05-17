@@ -139,6 +139,7 @@ class Return(Statement):
     pass
 
 
+
 ## Expressions
 # ----------------
 
@@ -219,3 +220,29 @@ class FunctionCall(Expression):
 
     name: str
     arguments: List[Expression]
+
+
+# 
+
+@dataclass
+class File(ASTnode):
+    """Reprensents the whole file, with the main program and the subprograms"""
+    program : Program
+    subprograms : list
+
+@dataclass
+class Function(ASTnode):
+    """Represents a function definition"""
+    return_type: str        # 'INTEGER', 'REAL', etc.
+    name: str
+    params: List[str]
+    declarations: List[Declaration]
+    statements: List[Statement]
+
+@dataclass
+class Subroutine(ASTnode):
+    """Represents a subroutine definition"""
+    name: str
+    params: List[str]
+    declarations: List[Declaration]
+    statements: List[Statement]
